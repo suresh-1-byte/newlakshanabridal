@@ -1,18 +1,18 @@
 import { useEffect } from "react";
-import { useNavigate } from "@tanstack/react-router";
-import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/FirebaseAuthContext";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
-export function ProtectedRoute({ children }: ProtectedRouteProps) {
+export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isAdmin, loading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!loading && !isAdmin) {
-      navigate({ to: "/admin/login" });
+      navigate("/admin/login");
     }
   }, [isAdmin, loading, navigate]);
 

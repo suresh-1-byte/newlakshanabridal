@@ -120,7 +120,7 @@ http://192.168.1.2:8081/admin/login
 - ⚛️ React 19
 - 🔷 TypeScript
 - 🎨 Tailwind CSS
-- 🔐 Supabase Auth
+- 🔐 Firebase Auth
 - 🚀 TanStack Router
 
 ---

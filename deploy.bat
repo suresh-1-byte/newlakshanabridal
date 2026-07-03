@@ -51,12 +51,14 @@ echo.
 
 echo [5/5] Post-Deployment Steps:
 echo.
-echo CRITICAL - Run Supabase SQL Migration:
+echo Your application is now deployed to Vercel!
+echo.
+echo Next Steps:
 echo ======================================
-echo 1. Go to: https://supabase.com/dashboard/project/lhqwuycqjzsmkvwllvzx/sql/new
-echo 2. Open file: supabase\migrations\00005_fix_public_booking.sql
-echo 3. Copy entire contents and paste in SQL Editor
-echo 4. Click "Run" button
+echo 1. Visit your deployment URL
+echo 2. Test the booking form
+echo 3. Test admin login
+echo 4. Verify Firebase connectivity
 echo.
 echo Configure DNS in GoDaddy:
 echo ========================

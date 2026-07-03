@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useReveal } from "../hooks/useReveal";
-import { api } from "../lib/api";
+import { firebaseApi } from "../lib/firebaseApi";
 
 interface Testimonial {
-  _id: string;
-  quote: string;
-  name: string;
-  role: string;
+  id: string;
+  customerName: string;
+  review: string;
+  designation?: string;
   rating?: number;
 }
 
@@ -20,7 +20,7 @@ export function Testimonials() {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const response = await api.getTestimonials();
+        const response = await firebaseApi.getTestimonials();
         if (response.success && response.data) {
           setQuotes(response.data);
         }
@@ -70,14 +70,14 @@ export function Testimonials() {
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
               <p className="font-display text-2xl md:text-3xl leading-[1.4] text-[#f8f5f0]/90">
-                {currentQuote.quote}
+                {currentQuote.review}
               </p>
               <div className="mt-10 flex items-center gap-4">
                 <span className="w-12 h-px bg-[#d4af37]" />
                 <div>
-                  <div className="text-sm tracking-wider text-[#f8f5f0]">{currentQuote.name}</div>
+                  <div className="text-sm tracking-wider text-[#f8f5f0]">{currentQuote.customerName}</div>
                   <div className="text-[10px] tracking-[0.3em] uppercase text-[#d4af37]/80 mt-1">
-                    {currentQuote.role}
+                    {currentQuote.designation || 'Verified Customer'}
                   </div>
                 </div>
               </div>

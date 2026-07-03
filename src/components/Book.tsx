@@ -3,7 +3,7 @@ import { FiPhone, FiMessageCircle, FiCalendar } from "react-icons/fi";
 import { useReveal } from "../hooks/useReveal";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
-import { api } from "../lib/api";
+import { firebaseApi } from "../lib/firebaseApi";
 import { toast } from "sonner";
 
 function Field({
@@ -156,7 +156,7 @@ export function Book() {
     };
 
     try {
-      const response = await api.createBooking(data);
+      const response = await firebaseApi.createBooking(data);
       if (response.success) {
         toast.success(response.message || 'Booking request submitted successfully!');
         (e.target as HTMLFormElement).reset();
@@ -164,6 +164,7 @@ export function Book() {
         toast.error(response.message || 'Failed to submit booking request');
       }
     } catch (error) {
+      console.error('Booking submission error:', error);
       toast.error('Failed to submit booking request. Please try again.');
     } finally {
       setIsSubmitting(false);

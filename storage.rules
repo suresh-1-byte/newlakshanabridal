@@ -1,0 +1,44 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if file is an image
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+    
+    // Helper function to check if file is under 10MB
+    function isUnder10MB() {
+      return request.resource.size < 10 * 1024 * 1024;
+    }
+    
+    // Gallery images - admins can upload, everyone can read
+    match /gallery/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && isImage() && isUnder10MB();
+    }
+    
+    // Service images - admins can upload, everyone can read
+    match /services/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && isImage() && isUnder10MB();
+    }
+    
+    // Testimonial images - admins can upload, everyone can read
+    match /testimonials/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && isImage() && isUnder10MB();
+    }
+    
+    // Profile images - users can upload their own
+    match /profiles/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && isImage() && isUnder10MB();
+    }
+  }
+}

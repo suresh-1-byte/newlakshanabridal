@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Manual Setup Guide - Lakshana Atelier</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FAF9F6 0%, #F5F0E8 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #C9A96E 0%, #B8956A 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 18px;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .step {
+            background: #FAF9F6;
+            border-left: 5px solid #C9A96E;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #C9A96E;
+            color: white;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .step h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .step-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .step-content ol {
+            margin-left: 20px;
+        }
+        
+        .step-content li {
+            margin-bottom: 12px;
+            color: #555;
+        }
+        
+        .highlight {
+            background: #FFF9E6;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #B8956A;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #C9A96E 0%, #B8956A 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(201, 169, 110, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+        }
+        
+        .credentials {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        
+        .credentials h3 {
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        
+        .credentials p {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .credentials code {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .warning {
+            background: #FEF3C7;
+            border: 2px solid #F59E0B;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .warning h4 {
+            color: #92400E;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .warning p {
+            color: #78350F;
+        }
+        
+        .success {
+            background: #D1FAE5;
+            border: 2px solid #10B981;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .success h4 {
+            color: #065F46;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .success p {
+            color: #047857;
+        }
+        
+        .code-block {
+            background: #1F2937;
+            color: #F9FAFB;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        .footer {
+            background: #F9FAFB;
+            padding: 30px;
+            text-align: center;
+            color: #6B7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 Firebase Manual Setup Guide</h1>
+            <p>Complete these 3 simple steps to activate your admin panel</p>
+        </div>
+        
+        <div class="content">
+            <div class="credentials">
+                <h3>🔐 Admin Credentials</h3>
+                <p><strong>Email:</strong> <code>sureshkathirvel801@gmail.com</code></p>
+                <p><strong>Password:</strong> <code>Admin123!@#</code></p>
+            </div>
+            
+            <div class="warning">
+                <h4>⚠️ Important Notice</h4>
+                <p>The automated script has already added all Firebase environment variables to Vercel and redeployed your website. You only need to complete these 3 manual steps in Firebase Console.</p>
+            </div>
+            
+            <!-- STEP 1 -->
+            <div class="step">
+                <div class="step-number">1</div>
+                <h2>Create Admin User in Firebase Authentication</h2>
+                
+                <div class="button-group">
+                    <a href="https://console.firebase.google.com/project/lakshanaatelier/authentication/users" target="_blank" class="btn">
+                        🔥 Open Firebase Authentication
+                    </a>
+                </div>
+                
+                <div class="step-content">
+                    <ol>
+                        <li>Click the <strong>"Add user"</strong> button (top right corner)</li>
+                        <li>Enter email: <span class="highlight">sureshkathirvel801@gmail.com</span></li>
+                        <li>Enter password: <span class="highlight">Admin123!@#</span></li>
+                        <li>Click <strong>"Add user"</strong></li>
+                        <li><strong>IMPORTANT:</strong> Copy the <strong>User UID</strong> that appears (looks like: abc123xyz456def789)</li>
+                    </ol>
+                </div>
+                
+                <div class="warning">
+                    <h4>📋 Save the User UID!</h4>
+                    <p>You will need this User UID for Step 2. It looks like a long string of random characters (e.g., "71aR5SpQkDY9aWhh5kg9D7cRW7H3").</p>
+                </div>
+            </div>
+            
+            <!-- STEP 2 -->
+            <div class="step">
+                <div class="step-number">2</div>
+                <h2>Create Admin Document in Firestore</h2>
+                
+                <div class="button-group">
+                    <a href="https://console.firebase.google.com/project/lakshanaatelier/firestore/data" target="_blank" class="btn">
+                        🔥 Open Firestore Database
+                    </a>
+                </div>
+                
+                <div class="step-content">
+                    <ol>
+                        <li>Look for the <strong>"admins"</strong> collection in the left sidebar</li>
+                        <li>If it doesn't exist, click <strong>"Start collection"</strong> and name it <span class="highlight">admins</span></li>
+                        <li>Click <strong>"Add document"</strong></li>
+                        <li>For <strong>Document ID</strong>, paste the <strong>User UID</strong> you copied from Step 1</li>
+                        <li>Add these fields one by one (click "Add field" button):</li>
+                    </ol>
+                    
+                    <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #F3F4F6;">
+                                <th style="padding: 12px; text-align: left; border: 1px solid #E5E7EB;">Field Name</th>
+                                <th style="padding: 12px; text-align: left; border: 1px solid #E5E7EB;">Type</th>
+                                <th style="padding: 12px; text-align: left; border: 1px solid #E5E7EB;">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;"><code>email</code></td>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;">string</td>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;"><code>sureshkathirvel801@gmail.com</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;"><code>fullName</code></td>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;">string</td>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;"><code>Super Admin</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;"><code>role</code></td>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;">string</td>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;"><code>super_admin</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;"><code>status</code></td>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;">string</td>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;"><code>active</code></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;"><code>createdAt</code></td>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;">timestamp</td>
+                                <td style="padding: 12px; border: 1px solid #E5E7EB;">Click "Insert timestamp"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <ol start="6" style="margin-top: 20px;">
+                        <li>Click <strong>"Save"</strong></li>
+                    </ol>
+                </div>
+                
+                <div class="success">
+                    <h4>✅ Admin User Created!</h4>
+                    <p>You can now login with these credentials at: <a href="https://www.lakshanaatelier.in/admin/login" target="_blank" style="color: #047857; font-weight: bold;">https://www.lakshanaatelier.in/admin/login</a></p>
+                </div>
+            </div>
+            
+            <!-- STEP 3 -->
+            <div class="step">
+                <div class="step-number">3</div>
+                <h2>Deploy Firebase Security Rules</h2>
+                
+                <div class="step-content">
+                    <h4 style="margin-bottom: 15px;">3A. Deploy Firestore Rules</h4>
+                    
+                    <div class="button-group">
+                        <a href="https://console.firebase.google.com/project/lakshanaatelier/firestore/rules" target="_blank" class="btn">
+                            🔥 Open Firestore Rules
+                        </a>
+                    </div>
+                    
+                    <ol style="margin-top: 20px;">
+                        <li>Click in the rules editor and press <strong>Ctrl+A</strong> (or Cmd+A on Mac) to select all</li>
+                        <li>Press <strong>Delete</strong> to clear all existing rules</li>
+                        <li>Copy the rules below and paste them into the editor:</li>
+                    </ol>
+                    
+                    <div class="code-block">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /admins/{adminId} {
+      allow read, write: if request.auth != null;
+    }
+    match /customers/{customerId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+    match /appointments/{appointmentId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+    match /gallery/{galleryId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /testimonials/{testimonialId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /contact_messages/{messageId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+  }
+}</div>
+                    
+                    <ol start="4">
+                        <li>Click the <strong>"Publish"</strong> button (top right)</li>
+                        <li>Wait for the success message</li>
+                    </ol>
+                    
+                    <h4 style="margin: 30px 0 15px 0;">3B. Deploy Storage Rules</h4>
+                    
+                    <div class="button-group">
+                        <a href="https://console.firebase.google.com/project/lakshanaatelier/storage/rules" target="_blank" class="btn">
+                            🔥 Open Storage Rules
+                        </a>
+                    </div>
+                    
+                    <ol style="margin-top: 20px;">
+                        <li>Click in the rules editor and press <strong>Ctrl+A</strong> (or Cmd+A on Mac) to select all</li>
+                        <li>Press <strong>Delete</strong> to clear all existing rules</li>
+                        <li>Copy the rules below and paste them into the editor:</li>
+                    </ol>
+                    
+                    <div class="code-block">rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+    function isUnder10MB() {
+      return request.resource.size < 10 * 1024 * 1024;
+    }
+    match /gallery/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && isImage() && isUnder10MB();
+    }
+    match /services/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && isImage() && isUnder10MB();
+    }
+    match /testimonials/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && isImage() && isUnder10MB();
+    }
+    match /profiles/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && isImage() && isUnder10MB();
+    }
+  }
+}</div>
+                    
+                    <ol start="4">
+                        <li>Click the <strong>"Publish"</strong> button (top right)</li>
+                        <li>Wait for the success message</li>
+                    </ol>
+                </div>
+                
+                <div class="success">
+                    <h4>✅ Security Rules Deployed!</h4>
+                    <p>Your website is now fully secured. Public users can submit bookings and view gallery. Only authenticated admins can manage data.</p>
+                </div>
+            </div>
+            
+            <!-- TEST SECTION -->
+            <div class="step" style="background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%); border-left-color: #3B82F6;">
+                <h2 style="color: #1E40AF;">🧪 Test Everything</h2>
+                
+                <div class="step-content">
+                    <h4>Test 1: Admin Login</h4>
+                    <div class="button-group">
+                        <a href="https://www.lakshanaatelier.in/admin/login" target="_blank" class="btn">
+                            Test Admin Login
+                        </a>
+                    </div>
+                    <p style="margin-top: 15px;">Login with: <code>sureshkathirvel801@gmail.com</code> / <code>Admin123!@#</code></p>
+                    
+                    <h4 style="margin-top: 30px;">Test 2: Submit Booking</h4>
+                    <div class="button-group">
+                        <a href="https://www.lakshanaatelier.in/#book" target="_blank" class="btn btn-secondary">
+                            Test Booking Form
+                        </a>
+                    </div>
+                    <p style="margin-top: 15px;">Fill the form and submit. Check if booking appears in admin panel.</p>
+                    
+                    <h4 style="margin-top: 30px;">Test 3: Upload Gallery Image</h4>
+                    <div class="button-group">
+                        <a href="https://www.lakshanaatelier.in/admin/gallery" target="_blank" class="btn btn-secondary">
+                            Test Gallery Upload
+                        </a>
+                    </div>
+                    <p style="margin-top: 15px;">Login first, then upload an image. Check if it appears on the homepage portfolio.</p>
+                </div>
+            </div>
+            
+            <div class="success" style="margin-top: 40px; padding: 30px;">
+                <h3 style="font-size: 28px; margin-bottom: 20px;">🎉 Setup Complete!</h3>
+                <p style="font-size: 18px; margin-bottom: 15px;">Your Lakshana Atelier website is now fully functional with:</p>
+                <ul style="margin-left: 30px; margin-top: 15px; font-size: 16px;">
+                    <li style="margin-bottom: 10px;">✅ Customer booking system</li>
+                    <li style="margin-bottom: 10px;">✅ Admin authentication</li>
+                    <li style="margin-bottom: 10px;">✅ Admin dashboard</li>
+                    <li style="margin-bottom: 10px;">✅ Booking management</li>
+                    <li style="margin-bottom: 10px;">✅ Gallery management</li>
+                    <li style="margin-bottom: 10px;">✅ Real-time updates</li>
+                    <li style="margin-bottom: 10px;">✅ Secure Firebase rules</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p style="font-size: 18px; color: #374151; margin-bottom: 10px;"><strong>Lakshana Bridal Studio</strong></p>
+            <p>Premium Bridal Makeup & Services</p>
+            <p style="margin-top: 15px; font-size: 14px;">© 2026 All rights reserved</p>
+        </div>
+    </div>
+</body>
+</html>

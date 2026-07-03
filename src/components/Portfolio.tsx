@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { firebaseApi } from "../lib/firebaseApi";
+import { useReveal } from "../hooks/useReveal";
 import g1 from "../assets/gallery-1.png";
 import g2 from "../assets/gal 2.png";
 import g3 from "../assets/gal3.png";
 import g4 from "../assets/gallery-4.jpg";
 import g5 from "../assets/gal5.jpeg";
 import g6 from "../assets/gal4.png";
-import { useReveal } from "../hooks/useReveal";
 
-const items = [
+// Default static items as fallback
+const defaultItems = [
   { src: g1, cat: "Reception", title: "Blush Reverie" },
   { src: g5, cat: "Bridal", title: "Crimson Heirloom" },
   { src: g3, cat: "Hair", title: "Jasmine Braid" },
@@ -22,7 +24,39 @@ const cats = ["All", "Bridal", "Reception", "Engagement", "Hair", "Academy"];
 export function Portfolio() {
   const [active, setActive] = useState("All");
   const [open, setOpen] = useState<number | null>(null);
+  const [items, setItems] = useState(defaultItems);
+  const [loading, setLoading] = useState(true);
   const titleRef = useReveal<HTMLHeadingElement>();
+
+  useEffect(() => {
+    loadGallery();
+  }, []);
+
+  const loadGallery = async () => {
+    try {
+      const response = await firebaseApi.getGallery();
+      if (response.success && response.data && response.data.length > 0) {
+        // Filter only published (isActive: true) images
+        const publishedItems = response.data.filter((item: any) => item.isActive === true);
+        
+        if (publishedItems.length > 0) {
+          // Transform Firebase gallery items to match the format
+          const galleryItems = publishedItems.map((item: any) => ({
+            src: item.imageUrl || item.thumbnailUrl,
+            cat: item.categoryName || "Bridal",
+            title: item.title
+          }));
+          setItems(galleryItems);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading gallery:', error);
+      // Keep default items on error
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const filtered = active === "All" ? items : items.filter((i) => i.cat === active);
 
   return (

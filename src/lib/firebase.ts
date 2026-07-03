@@ -3,36 +3,81 @@ import { getAuth, connectAuthEmulator } from 'firebase/auth'
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore'
 import { getStorage, connectStorageEmulator } from 'firebase/storage'
 
-// Firebase configuration
-// TODO: Replace with your Firebase project config
+// Firebase configuration with hardcoded fallbacks
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "YOUR_API_KEY",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "YOUR_PROJECT_ID",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "YOUR_MESSAGING_SENDER_ID",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "YOUR_APP_ID",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCgdbZk6MU5gdCbyeUUX33TkQkycbZo6BM",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "lakshanaatelier.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "lakshanaatelier",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "lakshanaatelier.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "905891434766",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:905891434766:web:3faf870cd5d2af53a6075f",
 }
 
-// Initialize Firebase
-export const app = initializeApp(firebaseConfig)
+// Validate configuration
+const isConfigValid = firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.authDomain
 
-// Initialize services
-export const auth = getAuth(app)
-export const db = getFirestore(app)
-export const storage = getStorage(app)
+let app: any = null
+let auth: any = null
+let db: any = null
+let storage: any = null
+let initError: string | null = null
 
-// Connect to emulators in development (optional)
-if (import.meta.env.DEV && import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
-  connectAuthEmulator(auth, 'http://localhost:9099')
-  connectFirestoreEmulator(db, 'localhost', 8080)
-  connectStorageEmulator(storage, 'localhost', 9199)
+try {
+  if (!isConfigValid) {
+    throw new Error('Firebase configuration is incomplete. Missing required fields.')
+  }
+
+  // Debug: Log configuration
+  console.log('🔍 Firebase Config:', {
+    hasApiKey: !!firebaseConfig.apiKey,
+    apiKeyPrefix: firebaseConfig.apiKey?.substring(0, 10) + '...',
+    projectId: firebaseConfig.projectId,
+    authDomain: firebaseConfig.authDomain,
+    envLoaded: {
+      VITE_FIREBASE_API_KEY: !!import.meta.env.VITE_FIREBASE_API_KEY,
+      VITE_FIREBASE_PROJECT_ID: !!import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    }
+  })
+
+  // Initialize Firebase
+  app = initializeApp(firebaseConfig)
+  auth = getAuth(app)
+  db = getFirestore(app)
+  storage = getStorage(app)
+
+  // Connect to emulators in development (optional)
+  if (import.meta.env.DEV && import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
+    try {
+      connectAuthEmulator(auth, 'http://localhost:9099')
+      connectFirestoreEmulator(db, 'localhost', 8080)
+      connectStorageEmulator(storage, 'localhost', 9199)
+      console.log('🔧 Connected to Firebase Emulators')
+    } catch (emulatorError) {
+      console.warn('⚠️ Could not connect to emulators:', emulatorError)
+    }
+  }
+
+  console.log('✅ Firebase initialization: SUCCESS')
+  console.log('🔥 Firebase initialized:', {
+    projectId: firebaseConfig.projectId,
+    authDomain: firebaseConfig.authDomain,
+  })
+} catch (error: any) {
+  console.error('❌ Firebase initialization: FAILED')
+  console.error('❌ Error:', error)
+  initError = error.message || 'Unknown Firebase initialization error'
+  
+  // Create fallback objects to prevent app crashes
+  console.warn('⚠️ Creating fallback Firebase objects to prevent app crash')
 }
 
-console.log('🔥 Firebase initialized:', {
-  projectId: firebaseConfig.projectId,
-  authDomain: firebaseConfig.authDomain,
-})
+// Export with error checking
+export { app, auth, db, storage, initError }
+
+// Export helper to check if Firebase is ready
+export const isFirebaseReady = (): boolean => {
+  return app !== null && auth !== null && db !== null && initError === null
+}
 
 // =====================================================
 // TYPESCRIPT TYPE DEFINITIONS

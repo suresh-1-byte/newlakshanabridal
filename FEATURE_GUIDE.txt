@@ -1,0 +1,287 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║                                                                      ║
+║             🆕 NEW FEATURES - QUICK VISUAL GUIDE 🆕                 ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│  FEATURE 1: PASSWORD SHOW/HIDE TOGGLE                               │
+└──────────────────────────────────────────────────────────────────────┘
+
+   WHERE: Admin Login Page
+   URL: https://www.lakshanaatelier.in/admin/login
+
+   BEFORE (Password Hidden):
+   ┌─────────────────────────────────────────┐
+   │ Password                                │
+   │ ┌─────────────────────────────────────┐ │
+   │ │ 🔒  ••••••••••             👁️        │ │  ← Click eye to SHOW
+   │ └─────────────────────────────────────┘ │
+   └─────────────────────────────────────────┘
+
+   AFTER (Password Visible):
+   ┌─────────────────────────────────────────┐
+   │ Password                                │
+   │ ┌─────────────────────────────────────┐ │
+   │ │ 🔒  Admin123!@#           🚫👁️       │ │  ← Click eye-off to HIDE
+   │ └─────────────────────────────────────┘ │
+   └─────────────────────────────────────────┘
+
+   HOW TO USE:
+   1. Go to admin login page
+   2. Type your password
+   3. Click the EYE ICON (👁️) on the right
+   4. Your password becomes visible
+   5. Click again to hide it
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│  FEATURE 2: PUBLISH/UNPUBLISH IMAGES                                │
+└──────────────────────────────────────────────────────────────────────┘
+
+   WHERE: Admin Gallery Management
+   URL: https://www.lakshanaatelier.in/admin/gallery
+
+   ┌─────────────────────────────────────────────────────────────────┐
+   │  IMAGE CARD - PUBLISHED STATUS                                  │
+   └─────────────────────────────────────────────────────────────────┘
+   
+   ┌───────────────────────────────────────┐
+   │  ┌─────────────────────────────────┐  │
+   │  │                                 │  │
+   │  │      [Your Image Preview]       │  │
+   │  │                                 │  │
+   │  │              👁️ Published ◄──── Green badge (visible on website)
+   │  └─────────────────────────────────┘  │
+   │                                       │
+   │  Beautiful Bridal Makeup              │
+   │  Traditional red and gold look...     │
+   │                                       │
+   │  ┌─────────────────────────────────┐  │
+   │  │ 🚫👁️  Unpublish from Website   │  │ ◄── Yellow button (click to hide)
+   │  └─────────────────────────────────┘  │
+   │                                       │
+   │  ┌──────────┐  ┌──────────────┐     │
+   │  │ ✏️ Edit  │  │ 🗑️ Delete   │     │
+   │  └──────────┘  └──────────────┘     │
+   └───────────────────────────────────────┘
+
+
+   ┌─────────────────────────────────────────────────────────────────┐
+   │  IMAGE CARD - UNPUBLISHED STATUS                                │
+   └─────────────────────────────────────────────────────────────────┘
+   
+   ┌───────────────────────────────────────┐
+   │  ┌─────────────────────────────────┐  │
+   │  │                                 │  │
+   │  │      [Your Image Preview]       │  │
+   │  │                                 │  │
+   │  │          🚫👁️ Unpublished ◄──── Gray badge (hidden from website)
+   │  └─────────────────────────────────┘  │
+   │                                       │
+   │  Test Bridal Look                     │
+   │  Not ready to show yet...             │
+   │                                       │
+   │  ┌─────────────────────────────────┐  │
+   │  │ 👁️  Publish to Website         │  │ ◄── Green button (click to show)
+   │  └─────────────────────────────────┘  │
+   │                                       │
+   │  ┌──────────┐  ┌──────────────┐     │
+   │  │ ✏️ Edit  │  │ 🗑️ Delete   │     │
+   │  └──────────┘  └──────────────┘     │
+   └───────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│  HOW PUBLISH/UNPUBLISH WORKS                                         │
+└──────────────────────────────────────────────────────────────────────┘
+
+   WORKFLOW:
+
+   Step 1: Upload Image
+   ─────────────────────
+   [Admin Panel] → Click "Add New Image" → Upload photo
+                ↓
+   ✅ Image uploaded to admin gallery
+   ✅ Status: PUBLISHED (by default)
+   ✅ Visible on website immediately
+
+
+   Step 2: Unpublish Image (Hide from Website)
+   ─────────────────────────────────────────────
+   [Admin Panel] → Find image → Click "Unpublish from Website"
+                ↓
+   ✅ Badge changes: Green → Gray
+   ✅ Button changes: "Unpublish" → "Publish"
+   ✅ Image hidden from website
+   ❌ Customers can't see it
+   ✅ Still in admin panel
+
+
+   Step 3: Publish Image (Show on Website)
+   ────────────────────────────────────────
+   [Admin Panel] → Find image → Click "Publish to Website"
+                ↓
+   ✅ Badge changes: Gray → Green
+   ✅ Button changes: "Publish" → "Unpublish"
+   ✅ Image visible on website
+   ✅ Customers can see it
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│  STATUS INDICATORS                                                   │
+└──────────────────────────────────────────────────────────────────────┘
+
+   BADGE COLORS:
+   ┌──────────────────────┐
+   │ 👁️  Published        │  GREEN badge = Image is live on website
+   └──────────────────────┘
+
+   ┌──────────────────────┐
+   │ 🚫👁️  Unpublished    │  GRAY badge = Image is hidden from website
+   └──────────────────────┘
+
+
+   BUTTON COLORS:
+   ┌─────────────────────────────────┐
+   │ 🚫👁️  Unpublish from Website   │  YELLOW = Image is currently visible
+   └─────────────────────────────────┘  (click to hide)
+
+   ┌─────────────────────────────────┐
+   │ 👁️  Publish to Website         │  GREEN = Image is currently hidden
+   └─────────────────────────────────┘  (click to show)
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│  WHAT HAPPENS ON WEBSITE                                             │
+└──────────────────────────────────────────────────────────────────────┘
+
+   PUBLIC WEBSITE PORTFOLIO:
+   URL: https://www.lakshanaatelier.in (scroll to Portfolio)
+
+   ✅ Shows ONLY images with "Published" status
+   ❌ Hides ALL images with "Unpublished" status
+   🔄 Updates automatically (no page refresh needed)
+
+
+   EXAMPLE:
+
+   You have 10 images in Admin Gallery:
+      • 6 images = Published (Green badge)
+      • 4 images = Unpublished (Gray badge)
+
+   Website Portfolio shows:
+      • 6 images (only the published ones)
+      • 4 images are invisible to customers
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│  USE CASES                                                           │
+└──────────────────────────────────────────────────────────────────────┘
+
+   ✅ Upload photos, review quality, then publish best ones
+   ✅ Prepare seasonal portfolio in advance
+   ✅ Hide summer photos in winter
+   ✅ Test new images privately before showing to customers
+   ✅ Keep backup images stored but hidden
+   ✅ Rotate portfolio weekly (show different images each week)
+   ✅ Special event preparation (wedding season, festivals)
+   ✅ Portfolio refresh without deleting old images
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│  QUICK REFERENCE                                                     │
+└──────────────────────────────────────────────────────────────────────┘
+
+   PASSWORD TOGGLE:
+   ─────────────────
+   Location:   Admin Login Page
+   Icon:       👁️ (eye) = show, 🚫👁️ (eye-off) = hide
+   Click:      Toggle between visible/hidden
+   Benefit:    Prevent typos, verify password
+
+
+   PUBLISH/UNPUBLISH:
+   ──────────────────
+   Location:   Admin Gallery Page
+   Green:      Published = Visible on website
+   Gray:       Unpublished = Hidden from website
+   Yellow:     Click to unpublish (hide)
+   Green:      Click to publish (show)
+   Benefit:    Control exactly what customers see
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│  TESTING CHECKLIST                                                   │
+└──────────────────────────────────────────────────────────────────────┘
+
+   TEST 1: Password Toggle
+   ☐ Go to admin login
+   ☐ Type password
+   ☐ Click eye icon
+   ☐ Password becomes visible
+   ☐ Click eye-off icon
+   ☐ Password becomes hidden
+   ☐ Submit and login successfully
+
+   TEST 2: Publish/Unpublish
+   ☐ Login to admin panel
+   ☐ Go to Gallery
+   ☐ Upload a test image
+   ☐ Check it shows "Published" badge
+   ☐ Open website, see image in Portfolio
+   ☐ Go back to admin
+   ☐ Click "Unpublish from Website"
+   ☐ Badge changes to "Unpublished"
+   ☐ Refresh website
+   ☐ Image disappears from Portfolio
+   ☐ Go back to admin
+   ☐ Click "Publish to Website"
+   ☐ Badge changes to "Published"
+   ☐ Refresh website
+   ☐ Image reappears in Portfolio
+
+
+┌──────────────────────────────────────────────────────────────────────┐
+│  SUMMARY                                                             │
+└──────────────────────────────────────────────────────────────────────┘
+
+   TWO NEW FEATURES ADDED:
+
+   1️⃣  PASSWORD VISIBILITY TOGGLE
+       • Eye icon in password field
+       • Click to show/hide password
+       • Helps prevent typos
+
+   2️⃣  PUBLISH/UNPUBLISH IMAGES
+       • Control which images appear on website
+       • Green badge = published (visible)
+       • Gray badge = unpublished (hidden)
+       • One-click toggle
+
+   BOTH FEATURES:
+   ✅ Working and ready to use
+   ✅ No setup required
+   ✅ Mobile responsive
+   ✅ Secure and fast
+   ✅ Professional design
+
+
+╔══════════════════════════════════════════════════════════════════════╗
+║                                                                      ║
+║                    🎉 FEATURES READY TO USE 🎉                      ║
+║                                                                      ║
+║         Test them after completing your Firebase setup!             ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+
+══════════════════════════════════════════════════════════════════════
+
+   For detailed information, see: NEW_FEATURES_ADDED.md
+
+   © 2026 Lakshana Bridal Studio
+   Modern features for modern business 👑
+
+══════════════════════════════════════════════════════════════════════

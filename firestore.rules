@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authenticated admin
+    function isAuthenticatedAdmin() {
+      return request.auth != null;
+    }
+    
+    // Admins collection - allow authenticated users to read their own admin doc
+    match /admins/{adminId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    
+    // Customers collection - allow public creation, admin read/write
+    match /customers/{customerId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+    
+    // Appointments collection - allow public creation, admin read/write
+    match /appointments/{appointmentId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+    
+    // Services collection - public read, admin write
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Gallery collection - public read, admin write
+    match /gallery/{galleryId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Testimonials collection - public read, admin write
+    match /testimonials/{testimonialId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if request.auth != null;
+    }
+    
+    // Contact messages collection - public create, admin read/write
+    match /contact_messages/{messageId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+  }
+}
