@@ -23,15 +23,15 @@ import * as XLSX from 'xlsx';
 
 interface Appointment {
   id: string;
-  booking_reference: string;
-  appointment_date: string;
-  appointment_time: string;
+  bookingReference: string;
+  appointmentDate: string;
+  appointmentTime: string;
   status: string;
-  total_amount: number;
-  paid_amount: number;
-  payment_status: string;
-  customer_notes?: string;
-  admin_notes?: string;
+  totalAmount: number;
+  paidAmount: number;
+  paymentStatus: string;
+  customerNotes?: string;
+  adminNotes?: string;
   customerName?: string;
   customerPhone?: string;
   customerEmail?: string;
@@ -81,21 +81,21 @@ export default function AdminBookings() {
     try {
       // Prepare data for Excel
       const exportData = filteredAppointments.map((appointment) => ({
-        "Booking Reference": appointment.booking_reference || "N/A",
+        "Booking Reference": appointment.bookingReference || "N/A",
         "Customer Name": appointment.customerName || "N/A",
         "Phone": appointment.customerPhone || "N/A",
         "Email": appointment.customerEmail || "N/A",
         "Service": appointment.serviceName || "N/A",
-        "Date": appointment.appointment_date 
-          ? new Date(appointment.appointment_date).toLocaleDateString() 
+        "Date": appointment.appointmentDate 
+          ? new Date(appointment.appointmentDate).toLocaleDateString() 
           : "N/A",
-        "Time": appointment.appointment_time || "N/A",
+        "Time": appointment.appointmentTime || "N/A",
         "Status": appointment.status || "N/A",
-        "Total Amount": appointment.total_amount || 0,
-        "Paid Amount": appointment.paid_amount || 0,
-        "Payment Status": appointment.payment_status || "N/A",
-        "Customer Notes": appointment.customer_notes || "",
-        "Admin Notes": appointment.admin_notes || "",
+        "Total Amount": appointment.totalAmount || 0,
+        "Paid Amount": appointment.paidAmount || 0,
+        "Payment Status": appointment.paymentStatus || "N/A",
+        "Customer Notes": appointment.customerNotes || "",
+        "Admin Notes": appointment.adminNotes || "",
       }));
 
       // Create workbook
@@ -140,7 +140,7 @@ export default function AdminBookings() {
       const search = searchTerm.toLowerCase();
       filtered = filtered.filter(
         (a) =>
-          a.booking_reference?.toLowerCase().includes(search) ||
+          a.bookingReference?.toLowerCase().includes(search) ||
           a.customerName?.toLowerCase().includes(search) ||
           a.customerPhone?.includes(search) ||
           a.customerEmail?.toLowerCase().includes(search)
@@ -342,7 +342,7 @@ export default function AdminBookings() {
                     <tr key={appointment.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">
-                          {appointment.booking_reference}
+                          {appointment.bookingReference}
                         </div>
                         <div className="text-sm text-gray-500">
                           {appointment.serviceName || "General Service"}
@@ -357,18 +357,26 @@ export default function AdminBookings() {
                             </div>
                             <div className="text-sm text-gray-500 flex items-center gap-1">
                               <Phone className="h-3 w-3" />
-                              {appointment.customerPhone || "N/A"}
+                              <a 
+                                href={`https://wa.me/91${appointment.customerPhone?.replace(/[^0-9]/g, '')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-green-600 hover:underline"
+                                title="Open WhatsApp"
+                              >
+                                {appointment.customerPhone || "N/A"}
+                              </a>
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {appointment.appointment_date ? new Date(appointment.appointment_date).toLocaleDateString() : "N/A"}
+                          {appointment.appointmentDate ? new Date(appointment.appointmentDate).toLocaleDateString() : "N/A"}
                         </div>
                         <div className="text-sm text-gray-500 flex items-center gap-1">
                           <Clock className="h-3 w-3" />
-                          {appointment.appointment_time || "N/A"}
+                          {appointment.appointmentTime || "N/A"}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -393,14 +401,25 @@ export default function AdminBookings() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900 flex items-center gap-1">
                           <DollarSign className="h-3 w-3" />
-                          ₹{(appointment.total_amount || 0).toLocaleString()}
+                          ₹{(appointment.totalAmount || 0).toLocaleString()}
                         </div>
                         <div className="text-sm text-gray-500">
-                          Paid: ₹{(appointment.paid_amount || 0).toLocaleString()}
+                          Paid: ₹{(appointment.paidAmount || 0).toLocaleString()}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex items-center gap-2">
+                          <a
+                            href={`https://wa.me/91${appointment.customerPhone?.replace(/[^0-9]/g, '')}?text=Hi ${appointment.customerName}, regarding your booking ${appointment.bookingReference} for ${appointment.serviceName} on ${appointment.appointmentDate ? new Date(appointment.appointmentDate).toLocaleDateString() : ''}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-green-600 hover:text-green-900"
+                            title="Open WhatsApp"
+                          >
+                            <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                            </svg>
+                          </a>
                           <button
                             onClick={() => {
                               setSelectedAppointment(appointment);
@@ -451,7 +470,7 @@ export default function AdminBookings() {
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     <div>
                       <span className="text-gray-600">Reference:</span>
-                      <p className="font-medium">{selectedAppointment.booking_reference}</p>
+                      <p className="font-medium">{selectedAppointment.bookingReference}</p>
                     </div>
                     <div>
                       <span className="text-gray-600">Status:</span>
@@ -460,12 +479,12 @@ export default function AdminBookings() {
                     <div>
                       <span className="text-gray-600">Date:</span>
                       <p className="font-medium">
-                        {selectedAppointment.appointment_date ? new Date(selectedAppointment.appointment_date).toLocaleDateString() : "N/A"}
+                        {selectedAppointment.appointmentDate ? new Date(selectedAppointment.appointmentDate).toLocaleDateString() : "N/A"}
                       </p>
                     </div>
                     <div>
                       <span className="text-gray-600">Time:</span>
-                      <p className="font-medium">{selectedAppointment.appointment_time || "N/A"}</p>
+                      <p className="font-medium">{selectedAppointment.appointmentTime || "N/A"}</p>
                     </div>
                   </div>
                 </div>
@@ -495,32 +514,47 @@ export default function AdminBookings() {
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     <div>
                       <span className="text-gray-600">Total Amount:</span>
-                      <p className="font-medium">₹{(selectedAppointment.total_amount || 0).toLocaleString()}</p>
+                      <p className="font-medium">₹{(selectedAppointment.totalAmount || 0).toLocaleString()}</p>
                     </div>
                     <div>
                       <span className="text-gray-600">Paid Amount:</span>
-                      <p className="font-medium">₹{(selectedAppointment.paid_amount || 0).toLocaleString()}</p>
+                      <p className="font-medium">₹{(selectedAppointment.paidAmount || 0).toLocaleString()}</p>
                     </div>
                     <div>
                       <span className="text-gray-600">Payment Status:</span>
-                      <p className="font-medium capitalize">{selectedAppointment.payment_status || "N/A"}</p>
+                      <p className="font-medium capitalize">{selectedAppointment.paymentStatus || "N/A"}</p>
                     </div>
                   </div>
                 </div>
 
-                {selectedAppointment.customer_notes && (
+                {selectedAppointment.customerNotes && (
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h3 className="font-semibold text-gray-900 mb-2">Customer Notes</h3>
-                    <p className="text-sm text-gray-700">{selectedAppointment.customer_notes}</p>
+                    <p className="text-sm text-gray-700">{selectedAppointment.customerNotes}</p>
                   </div>
                 )}
 
-                {selectedAppointment.admin_notes && (
+                {selectedAppointment.adminNotes && (
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h3 className="font-semibold text-gray-900 mb-2">Admin Notes</h3>
-                    <p className="text-sm text-gray-700">{selectedAppointment.admin_notes}</p>
+                    <p className="text-sm text-gray-700">{selectedAppointment.adminNotes}</p>
                   </div>
                 )}
+                
+                {/* WhatsApp Button */}
+                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                  <a
+                    href={`https://wa.me/91${selectedAppointment.customerPhone?.replace(/[^0-9]/g, '')}?text=Hi ${selectedAppointment.customerName}, regarding your booking ${selectedAppointment.bookingReference} for ${selectedAppointment.serviceName} on ${selectedAppointment.appointmentDate ? new Date(selectedAppointment.appointmentDate).toLocaleDateString() : ''}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                  >
+                    <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                    </svg>
+                    Open WhatsApp Chat
+                  </a>
+                </div>
               </div>
 
               <div className="mt-6 flex justify-end">

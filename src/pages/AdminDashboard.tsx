@@ -72,11 +72,11 @@ export default function AdminDashboard() {
       const pendingAppointments = appointments.filter(a => a.status === "pending").length;
       const completedAppointments = appointments.filter(a => a.status === "completed").length;
       const cancelledAppointments = appointments.filter(a => a.status === "cancelled").length;
-      const todayAppointments = appointments.filter(a => a.appointment_date === today).length;
+      const todayAppointments = appointments.filter(a => a.appointmentDate === today).length;
       
       const totalRevenue = appointments.reduce((sum, a) => {
         if (a.status === "completed" || a.status === "confirmed") {
-          return sum + (a.paid_amount || 0);
+          return sum + (a.paidAmount || 0);
         }
         return sum;
       }, 0);
@@ -91,7 +91,7 @@ export default function AdminDashboard() {
         todayAppointments,
       });
 
-      // Get recent appointments (sorted by created_at)
+      // Get recent appointments (sorted by createdAt)
       const recent = appointments
         .sort((a, b) => {
           const aTime = a.createdAt?.toDate?.() || new Date(0);
@@ -423,13 +423,13 @@ export default function AdminDashboard() {
                       className="hover:bg-white/80 transition-colors"
                     >
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {appointment.booking_reference}
+                        {appointment.bookingReference}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {appointment.customerName || "N/A"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {appointment.appointment_date ? new Date(appointment.appointment_date).toLocaleDateString() : "N/A"}
+                        {appointment.appointmentDate ? new Date(appointment.appointmentDate).toLocaleDateString() : "N/A"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getStatusColor(appointment.status)}`}>
@@ -437,7 +437,7 @@ export default function AdminDashboard() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        ₹{(appointment.total_amount || 0).toLocaleString()}
+                        ₹{(appointment.totalAmount || 0).toLocaleString()}
                       </td>
                     </motion.tr>
                   ))

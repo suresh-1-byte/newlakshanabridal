@@ -1,78 +1,64 @@
 @echo off
 echo ========================================
-echo LAKSHANA ATELIER - DEPLOYMENT SCRIPT
-echo Domain: lakshanaatelier.in
+echo LAKSHANA BRIDAL STUDIO
+echo Complete Deployment Script
 echo ========================================
 echo.
 
-echo [1/5] Installing dependencies...
+echo Step 1: Installing dependencies...
 call npm install
-if %errorlevel% neq 0 (
-    echo ERROR: Failed to install dependencies
+if errorlevel 1 (
+    echo ERROR: npm install failed
     pause
     exit /b 1
 )
-echo Dependencies installed successfully!
+echo ✓ Dependencies installed
 echo.
 
-echo [2/5] Running production build...
+echo Step 2: Building project...
 call npm run build
-if %errorlevel% neq 0 (
+if errorlevel 1 (
     echo ERROR: Build failed
     pause
     exit /b 1
 )
-echo Build completed successfully!
+echo ✓ Build successful
 echo.
 
-echo [3/5] Testing production build...
-echo.
-echo The preview server will start shortly.
-echo Press Ctrl+C to stop the preview and continue deployment.
-echo.
-timeout /t 3
-call npm run preview
-echo.
-
-echo [4/5] Deployment Options:
-echo.
-echo OPTION 1: Deploy to Vercel (Recommended)
-echo ----------------------------------------
-echo 1. Install Vercel CLI: npm install -g vercel
-echo 2. Login: vercel login
-echo 3. Deploy: vercel --prod
-echo.
-echo OPTION 2: Deploy to Netlify
-echo ----------------------------
-echo 1. Install Netlify CLI: npm install -g netlify-cli
-echo 2. Login: netlify login
-echo 3. Deploy: netlify deploy --prod
+echo Step 3: Deploying Firebase Rules and Indexes...
+call firebase deploy --only firestore:rules,firestore:indexes,storage:rules
+if errorlevel 1 (
+    echo ERROR: Firebase rules deployment failed
+    echo Make sure you are logged in: firebase login
+    pause
+    exit /b 1
+)
+echo ✓ Firebase rules deployed
 echo.
 
-echo [5/5] Post-Deployment Steps:
+echo Step 4: Deploying to Vercel...
+call git add .
+call git commit -m "Production deployment"
+call git push origin main
+if errorlevel 1 (
+    echo WARNING: Git push may have failed
+    echo Check if there are changes to commit
+)
+echo ✓ Code pushed to GitHub
 echo.
-echo Your application is now deployed to Vercel!
-echo.
-echo Next Steps:
-echo ======================================
-echo 1. Visit your deployment URL
-echo 2. Test the booking form
-echo 3. Test admin login
-echo 4. Verify Firebase connectivity
-echo.
-echo Configure DNS in GoDaddy:
-echo ========================
-echo 1. Login to: https://dcc.godaddy.com
-echo 2. Go to: DNS Management for lakshanaatelier.in
-echo 3. Follow instructions in DEPLOYMENT_GUIDE.md
-echo.
-echo Set Environment Variables:
-echo =========================
-echo Copy values from .env.production to your deployment platform
-echo (Vercel or Netlify Dashboard)
-echo.
+
 echo ========================================
-echo Deployment preparation complete!
-echo See DEPLOYMENT_GUIDE.md for detailed instructions
+echo ✅ DEPLOYMENT COMPLETE!
 echo ========================================
+echo.
+echo Website: https://lakshanaatelier.in
+echo Admin: https://lakshanaatelier.in/admin/login
+echo.
+echo Next steps:
+echo 1. Create admin user (see CREATE_ADMIN_USER.md)
+echo 2. Wait for Vercel deployment to finish
+echo 3. Wait for Firebase indexes to build (5-10 mins)
+echo 4. Test booking form on website
+echo 5. Test admin login and dashboard
+echo.
 pause
