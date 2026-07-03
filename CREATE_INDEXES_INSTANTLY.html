@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Firebase Indexes - Lakshana Bridal Studio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .status {
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .status h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        
+        .status-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .index-card {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .index-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+        
+        .index-card h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .field-list {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .field-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .field-item:last-child {
+            border-bottom: none;
+        }
+        
+        .field-name {
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        .field-order {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+        
+        .instructions {
+            background: #fef5e7;
+            border-left: 4px solid #f39c12;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .instructions h3 {
+            color: #d68910;
+            margin-bottom: 12px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            color: #7d6608;
+        }
+        
+        .instructions li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        
+        .success-message {
+            background: #c6f6d5;
+            border: 2px solid #48bb78;
+            color: #22543d;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .link-box {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 13px;
+            word-break: break-all;
+            color: #667eea;
+        }
+        
+        .timer {
+            text-align: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .timer {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Fix Firebase Indexes - Instantly</h1>
+        <p class="subtitle">Create the missing Firestore indexes with one click</p>
+        
+        <div class="status">
+            <h3>Current Status:</h3>
+            <div class="status-item">
+                <span class="status-icon">❌</span>
+                <span>Testimonials Index: <strong>Missing</strong></span>
+            </div>
+            <div class="status-item">
+                <span class="status-icon">❌</span>
+                <span>Gallery Index: <strong>Missing</strong></span>
+            </div>
+        </div>
+
+        <div class="index-card">
+            <h3>📋 Index 1: Testimonials</h3>
+            <div class="field-list">
+                <div class="field-item">
+                    <span class="field-name">Collection:</span>
+                    <span class="field-order">testimonials</span>
+                </div>
+                <div class="field-item">
+                    <span class="field-name">Field 1: isApproved</span>
+                    <span class="field-order">Ascending</span>
+                </div>
+                <div class="field-item">
+                    <span class="field-name">Field 2: isActive</span>
+                    <span class="field-order">Ascending</span>
+                </div>
+                <div class="field-item">
+                    <span class="field-name">Field 3: displayOrder</span>
+                    <span class="field-order">Ascending</span>
+                </div>
+            </div>
+            <button class="btn" onclick="createTestimonialsIndex()">
+                🚀 Create Testimonials Index
+            </button>
+        </div>
+
+        <div class="index-card">
+            <h3>🖼️ Index 2: Gallery</h3>
+            <div class="field-list">
+                <div class="field-item">
+                    <span class="field-name">Collection:</span>
+                    <span class="field-order">gallery</span>
+                </div>
+                <div class="field-item">
+                    <span class="field-name">Field 1: isActive</span>
+                    <span class="field-order">Ascending</span>
+                </div>
+                <div class="field-item">
+                    <span class="field-name">Field 2: displayOrder</span>
+                    <span class="field-order">Ascending</span>
+                </div>
+            </div>
+            <button class="btn" onclick="createGalleryIndex()">
+                🚀 Create Gallery Index
+            </button>
+        </div>
+
+        <button class="btn btn-success" onclick="createAllIndexes()">
+            ✨ Create ALL Indexes (Recommended)
+        </button>
+
+        <button class="btn btn-secondary" onclick="openFirebaseConsole()">
+            🔧 Open Firebase Console Manually
+        </button>
+
+        <div class="instructions">
+            <h3>📝 What happens next:</h3>
+            <ol>
+                <li>Click "Create ALL Indexes" button above</li>
+                <li>Firebase Console will open in new tabs</li>
+                <li>Click "Create" button in each tab</li>
+                <li>Wait 5-10 minutes for indexes to build</li>
+                <li>Refresh your website - everything will work!</li>
+            </ol>
+        </div>
+
+        <div id="successMessage" style="display: none;" class="success-message">
+            ✅ Index creation pages opened! Follow the instructions in the new tabs.
+        </div>
+    </div>
+
+    <script>
+        const projectId = 'lakshanaatelier';
+        
+        function createTestimonialsIndex() {
+            // Open Firebase Console to create testimonials index
+            const url = `https://console.firebase.google.com/project/${projectId}/firestore/indexes?create_composite=Clhwcm9qZWN0cy9sYWtzaGFuYWF0ZWxpZXIvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL3Rlc3RpbW9uaWFscy9pbmRleGVzL18QARoOCgppc0FwcHJvdmVkEAEaDgoKaXNBY3RpdmUQARoSCg5kaXNwbGF5T3JkZXIQARoMCghfX25hbWVfXxAB`;
+            
+            window.open(url, '_blank');
+            showSuccess();
+        }
+        
+        function createGalleryIndex() {
+            // Open Firebase Console to create gallery index
+            const url = `https://console.firebase.google.com/project/${projectId}/firestore/indexes?create_composite=ClJwcm9qZWN0cy9sYWtzaGFuYWF0ZWxpZXIvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL2dhbGxlcnkvaW5kZXhlcy9fEAEaDgoKaXNBY3RpdmUQARoSCg5kaXNwbGF5T3JkZXIQARoMCghfX25hbWVfXxAB`;
+            
+            window.open(url, '_blank');
+            showSuccess();
+        }
+        
+        function createAllIndexes() {
+            console.log('Creating all indexes...');
+            
+            // Open general indexes page
+            const indexesUrl = `https://console.firebase.google.com/project/${projectId}/firestore/indexes`;
+            window.open(indexesUrl, '_blank');
+            
+            // Show instructions
+            setTimeout(() => {
+                alert('Firebase Console opened!\n\nPlease:\n1. Click "Create Index" button\n2. Create Testimonials index:\n   - Collection: testimonials\n   - Fields: isApproved (Asc), isActive (Asc), displayOrder (Asc)\n3. Click "Create Index" again\n4. Create Gallery index:\n   - Collection: gallery\n   - Fields: isActive (Asc), displayOrder (Asc)\n5. Wait 5-10 minutes for build\n6. Refresh your website!');
+            }, 1000);
+            
+            showSuccess();
+        }
+        
+        function openFirebaseConsole() {
+            const url = `https://console.firebase.google.com/project/${projectId}/firestore/indexes`;
+            window.open(url, '_blank');
+        }
+        
+        function showSuccess() {
+            document.getElementById('successMessage').style.display = 'block';
+            
+            // Scroll to success message
+            document.getElementById('successMessage').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+        
+        // Auto-scroll to top on load
+        window.onload = function() {
+            window.scrollTo(0, 0);
+        };
+    </script>
+</body>
+</html>
