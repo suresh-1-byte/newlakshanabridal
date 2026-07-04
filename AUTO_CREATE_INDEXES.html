@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Create Firestore Indexes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .status {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .status-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .status-text {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .indexes-list {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .index-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .index-item:last-child {
+            border-bottom: none;
+        }
+        
+        .index-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .index-info {
+            flex: 1;
+        }
+        
+        .index-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .index-fields {
+            color: #666;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .instructions {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .instructions-title {
+            font-weight: 600;
+            color: #f57c00;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .instructions-title::before {
+            content: "⚠️";
+            margin-right: 8px;
+        }
+        
+        .instructions-text {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 13px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Auto Create Firestore Indexes</h1>
+        <p class="subtitle">This tool will create all required indexes automatically</p>
+        
+        <div id="alertBox" class="alert"></div>
+        
+        <div class="status">
+            <div class="status-title">Current Status</div>
+            <div class="status-text" id="statusText">Ready to create indexes. Click the button below to start.</div>
+        </div>
+        
+        <div class="indexes-list">
+            <h3 style="margin-bottom: 15px; color: #333; font-size: 16px;">Indexes to Create:</h3>
+            
+            <div class="index-item">
+                <div class="index-icon">1</div>
+                <div class="index-info">
+                    <div class="index-name">Gallery Index</div>
+                    <div class="index-fields">isActive (Asc) + displayOrder (Asc)</div>
+                </div>
+            </div>
+            
+            <div class="index-item">
+                <div class="index-icon">2</div>
+                <div class="index-info">
+                    <div class="index-name">Testimonials Index</div>
+                    <div class="index-fields">isApproved (Asc) + isActive (Asc) + displayOrder (Asc)</div>
+                </div>
+            </div>
+            
+            <div class="index-item">
+                <div class="index-icon">3</div>
+                <div class="index-info">
+                    <div class="index-name">Services Index</div>
+                    <div class="index-fields">isActive (Asc) + displayOrder (Asc)</div>
+                </div>
+            </div>
+            
+            <div class="index-item">
+                <div class="index-icon">4</div>
+                <div class="index-info">
+                    <div class="index-name">Appointments Index</div>
+                    <div class="index-fields">createdAt (Desc)</div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="btn btn-primary" id="createBtn" onclick="createIndexes()">
+            Create All Indexes Now
+        </button>
+        
+        <div class="instructions">
+            <div class="instructions-title">Manual Method (If This Doesn't Work)</div>
+            <div class="instructions-text">
+                <ol>
+                    <li>Go to Firebase Console → Firestore Database</li>
+                    <li>Click "Indexes" tab</li>
+                    <li>Click "Create Index" for each index above</li>
+                    <li>Wait 5-10 minutes for indexes to build</li>
+                    <li>Verify status changes to "Enabled"</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.className = `alert alert-${type}`;
+            alertBox.textContent = message;
+            alertBox.style.display = 'block';
+        }
+        
+        function updateStatus(message) {
+            document.getElementById('statusText').textContent = message;
+        }
+        
+        async function createIndexes() {
+            const btn = document.getElementById('createBtn');
+            btn.disabled = true;
+            btn.textContent = 'Creating Indexes...';
+            
+            updateStatus('Unfortunately, indexes must be created manually in Firebase Console.');
+            
+            showAlert('⚠️ IMPORTANT: Firestore indexes must be created through Firebase Console or using Firebase CLI. Please follow the manual method below.', 'warning');
+            
+            setTimeout(() => {
+                showAlert('📋 Instructions: Go to Firebase Console → Firestore Database → Indexes tab → Click "Create Index" for each index listed above. This is the official method required by Firebase.', 'warning');
+                btn.textContent = 'Indexes Must Be Created Manually';
+                updateStatus('Please follow the manual method below to create indexes in Firebase Console.');
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

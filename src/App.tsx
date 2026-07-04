@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { FirebaseAuthProvider } from './contexts/FirebaseAuthContext';
+import { Toaster } from './components/ui/sonner';
 import HomePage from './pages/HomePage';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
@@ -11,6 +12,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 function App() {
   return (
     <FirebaseAuthProvider>
+      <Toaster />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/admin/login" element={<AdminLogin />} />

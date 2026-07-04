@@ -195,7 +195,7 @@ export default function AdminLogin() {
                 ) : (
                   <>
                     <Lock className="w-5 h-5" />
-                    <span>Sign In to Dashboard</span>
+                    <span>Sign In</span>
                   </>
                 )}
               </span>
