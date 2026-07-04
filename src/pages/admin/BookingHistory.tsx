@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
+import { collection, query, where, orderBy, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../lib/firebase";
-import { History, Download, Filter, Calendar } from "lucide-react";
+import { History, Download, Filter, Calendar, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 import * as XLSX from "xlsx";
 import EmptyState from "../../components/admin/common/EmptyState";
 import LoadingSkeleton from "../../components/admin/common/LoadingSkeleton";
+import ConfirmDialog from "../../components/admin/common/ConfirmDialog";
+import { toast } from "sonner";
 
 interface BookingHistoryItem {
   id: string;
@@ -26,6 +28,8 @@ export default function BookingHistory() {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     loadBookingHistory();
@@ -114,6 +118,25 @@ export default function BookingHistory() {
 
     const filename = `Booking_History_${new Date().toISOString().split("T")[0]}.xlsx`;
     XLSX.writeFile(wb, filename);
+  };
+
+  const handleDeleteBooking = async (bookingId: string) => {
+    try {
+      setDeleting(true);
+      const bookingRef = doc(db, "appointments", bookingId);
+      await deleteDoc(bookingRef);
+      
+      toast.success("Booking deleted successfully!");
+      setDeleteConfirm(null);
+      
+      // Reload bookings after delete
+      loadBookingHistory();
+    } catch (error) {
+      console.error("Error deleting booking:", error);
+      toast.error("Failed to delete booking");
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -240,6 +263,9 @@ export default function BookingHistory() {
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
                     Amount
                   </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white/50 divide-y divide-gray-200/50">
@@ -283,6 +309,15 @@ export default function BookingHistory() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       ₹{(booking.totalAmount || 0).toLocaleString()}
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => setDeleteConfirm(booking.id)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-red-200 hover:border-red-300"
+                        title="Delete Booking"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </td>
                   </motion.tr>
                 ))}
               </tbody>
@@ -290,6 +325,19 @@ export default function BookingHistory() {
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={!!deleteConfirm}
+        onClose={() => setDeleteConfirm(null)}
+        onConfirm={() => deleteConfirm && handleDeleteBooking(deleteConfirm)}
+        title="Delete Booking"
+        message="Are you sure you want to delete this booking from history? This action cannot be undone."
+        confirmText="Delete Booking"
+        cancelText="Cancel"
+        type="danger"
+        loading={deleting}
+      />
     </div>
   );
 }
