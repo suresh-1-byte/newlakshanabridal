@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Status Check - Lakshana</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .check-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .check-item.checking {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+        }
+        
+        .check-item.success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+        }
+        
+        .check-item.error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        
+        .check-label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .check-status {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .config-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        
+        .config-box p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Firebase Status Check</h1>
+        <p class="subtitle">Lakshana Bridal Studio</p>
+        
+        <div id="checks">
+            <div id="check1" class="check-item">
+                <span class="check-label">1. Firebase Initialization</span>
+                <span class="check-status">Waiting...</span>
+            </div>
+            
+            <div id="check2" class="check-item">
+                <span class="check-label">2. Authentication Service</span>
+                <span class="check-status">Waiting...</span>
+            </div>
+            
+            <div id="check3" class="check-item">
+                <span class="check-label">3. Firestore Database</span>
+                <span class="check-status">Waiting...</span>
+            </div>
+            
+            <div id="check4" class="check-item">
+                <span class="check-label">4. Admin Users Check</span>
+                <span class="check-status">Waiting...</span>
+            </div>
+        </div>
+        
+        <button id="checkBtn" onclick="runChecks()">🔍 Run Checks</button>
+        
+        <div id="results" class="config-box" style="display: none;">
+            <strong>Configuration:</strong>
+            <div id="configDetails"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+        import { getAuth } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import { getFirestore, collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCgdbZk6MU5gdCbyeUUX33TkQkycbZo6BM",
+            authDomain: "lakshanaatelier.firebaseapp.com",
+            projectId: "lakshanaatelier",
+            storageBucket: "lakshanaatelier.firebasestorage.app",
+            messagingSenderId: "905891434766",
+            appId: "1:905891434766:web:3faf870cd5d2af53a6075f"
+        };
+
+        let app, auth, db;
+
+        function updateCheck(checkId, status, message) {
+            const element = document.getElementById(checkId);
+            element.className = `check-item ${status}`;
+            element.querySelector('.check-status').textContent = message;
+        }
+
+        window.runChecks = async function() {
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('results').style.display = 'none';
+            
+            // Check 1: Firebase Initialization
+            updateCheck('check1', 'checking', 'Initializing...');
+            try {
+                app = initializeApp(firebaseConfig);
+                updateCheck('check1', 'success', '✅ Success');
+            } catch (error) {
+                updateCheck('check1', 'error', '❌ Failed: ' + error.message);
+                document.getElementById('checkBtn').disabled = false;
+                return;
+            }
+
+            // Check 2: Authentication
+            updateCheck('check2', 'checking', 'Connecting...');
+            try {
+                auth = getAuth(app);
+                updateCheck('check2', 'success', '✅ Connected');
+            } catch (error) {
+                updateCheck('check2', 'error', '❌ Failed: ' + error.message);
+                document.getElementById('checkBtn').disabled = false;
+                return;
+            }
+
+            // Check 3: Firestore
+            updateCheck('check3', 'checking', 'Connecting...');
+            try {
+                db = getFirestore(app);
+                updateCheck('check3', 'success', '✅ Connected');
+            } catch (error) {
+                updateCheck('check3', 'error', '❌ Failed: ' + error.message);
+                document.getElementById('checkBtn').disabled = false;
+                return;
+            }
+
+            // Check 4: Admin Users
+            updateCheck('check4', 'checking', 'Fetching admins...');
+            try {
+                const adminsRef = collection(db, 'admins');
+                const q = query(adminsRef, where('role', 'in', ['super_admin', 'admin']));
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) {
+                    updateCheck('check4', 'error', '❌ No admin users found');
+                    showResults('No admin users exist. Please create one using CREATE_ADMIN_USER_FIREBASE.html');
+                } else {
+                    updateCheck('check4', 'success', `✅ Found ${snapshot.size} admin(s)`);
+                    
+                    let adminsList = '<strong>Admin Users:</strong><br>';
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        adminsList += `<p>📧 ${data.email} (${data.role})</p>`;
+                    });
+                    showResults(adminsList);
+                }
+            } catch (error) {
+                updateCheck('check4', 'error', '❌ Failed: ' + error.message);
+                showResults('Error fetching admins: ' + error.message);
+            }
+
+            document.getElementById('checkBtn').disabled = false;
+        };
+
+        function showResults(message) {
+            const resultsDiv = document.getElementById('results');
+            const configDiv = document.getElementById('configDetails');
+            
+            configDiv.innerHTML = `
+                <p><strong>Project ID:</strong> ${firebaseConfig.projectId}</p>
+                <p><strong>Auth Domain:</strong> ${firebaseConfig.authDomain}</p>
+                <p><strong>API Key:</strong> ${firebaseConfig.apiKey.substring(0, 20)}...</p>
+                <br>
+                ${message}
+            `;
+            
+            resultsDiv.style.display = 'block';
+        }
+
+        // Auto-run on load
+        window.addEventListener('load', () => {
+            setTimeout(() => runChecks(), 500);
+        });
+    </script>
+</body>
+</html>

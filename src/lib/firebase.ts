@@ -5,7 +5,7 @@ import { getStorage, connectStorageEmulator } from 'firebase/storage'
 
 // Firebase configuration with hardcoded fallbacks
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCgdbZk6MU5gdCbyeUUX33TkQkycbZo6BM",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyALZO4_0__nNeHNbO0s9WYiJeXgPBpq_94",
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "lakshanaatelier.firebaseapp.com",
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "lakshanaatelier",
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "lakshanaatelier.firebasestorage.app",
