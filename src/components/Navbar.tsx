@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Build version: 2.0.1 - Login button removed - Cache busting: 20260104-2030
+
 const links = [
   { href: "#home", label: "Home" },
   { href: "#about", label: "About" },
