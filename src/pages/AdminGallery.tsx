@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useAuth } from "../contexts/FirebaseAuthContext";
 import { firebaseApi } from "../lib/firebaseApi";
 import { storage } from "../lib/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
-  Home,
-  LogOut,
-  LayoutDashboard,
-  Calendar,
   Plus,
   Edit,
   Trash2,
@@ -19,6 +13,9 @@ import {
   EyeOff
 } from "lucide-react";
 import { toast } from "sonner";
+import LoadingSkeleton from "../components/admin/common/LoadingSkeleton";
+import EmptyState from "../components/admin/common/EmptyState";
+import ConfirmDialog from "../components/admin/common/ConfirmDialog";
 
 interface GalleryItem {
   id: string;
@@ -33,13 +30,14 @@ interface GalleryItem {
 }
 
 export default function AdminGallery() {
-  const { adminData, signOut } = useAuth();
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -168,14 +166,12 @@ export default function AdminGallery() {
   };
 
   const handleDeleteItem = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this gallery item?')) {
-      return;
-    }
-
     try {
+      setDeleting(true);
       const response = await firebaseApi.deleteGalleryItem(id);
       if (response.success) {
         toast.success('Gallery item deleted successfully!');
+        setDeleteConfirm(null);
         loadGallery();
       } else {
         toast.error(response.message || 'Failed to delete gallery item');
@@ -183,6 +179,8 @@ export default function AdminGallery() {
     } catch (error) {
       console.error('Error deleting gallery item:', error);
       toast.error('Failed to delete gallery item');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -233,82 +231,37 @@ export default function AdminGallery() {
   };
 
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#d4af37] mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading gallery...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSkeleton type="card" count={6} />;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="space-y-6">
       {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Gallery Management</h1>
-              <p className="mt-1 text-sm text-gray-600">
-                {gallery.length} items in gallery
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <Link
-                to="/"
-                className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
-              >
-                <Home className="h-4 w-4" />
-                Home
-              </Link>
-              <Link
-                to="/admin/dashboard"
-                className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
-              >
-                <LayoutDashboard className="h-4 w-4" />
-                Dashboard
-              </Link>
-              <Link
-                to="/admin/bookings"
-                className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
-              >
-                <Calendar className="h-4 w-4" />
-                Bookings
-              </Link>
-              <button
-                onClick={handleSignOut}
-                className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
-              >
-                <LogOut className="h-4 w-4" />
-                Sign Out
-              </button>
-            </div>
-          </div>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-serif font-bold text-gray-900">
+            Gallery Management
+          </h1>
+          <p className="text-gray-600 mt-1">
+            {gallery.length} items in gallery
+          </p>
         </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Add Button */}
-        <div className="mb-6">
-          <button
-            onClick={() => {
-              resetForm();
-              setShowAddModal(true);
-            }}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#d4af37] px-4 py-2 text-sm font-medium text-white hover:bg-[#c4a137]"
-          >
-            <Plus className="h-4 w-4" />
-            Add New Image
-          </button>
-        </div>
+        <button
+          onClick={() => {
+            resetForm();
+            setShowAddModal(true);
+          }}
+          className="btn-gold inline-flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" />
+          Add New Image
+        </button>
+      </div>
 
         {/* Gallery Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {gallery.map((item) => (
-            <div key={item.id} className="bg-white rounded-lg shadow overflow-hidden">
+            <div key={item.id} className="glass-card rounded-xl overflow-hidden hover-lift">
               <div className="relative aspect-square">
                 <img
                   src={item.imageUrl}
@@ -340,7 +293,7 @@ export default function AdminGallery() {
                 <div className="mb-3">
                   <button
                     onClick={() => handleTogglePublish(item.id, item.isActive)}
-                    className={`w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded text-sm font-medium transition-colors ${
+                    className={`w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                       item.isActive
                         ? 'bg-yellow-50 text-yellow-700 hover:bg-yellow-100'
                         : 'bg-green-50 text-green-700 hover:bg-green-100'
@@ -363,14 +316,14 @@ export default function AdminGallery() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => openEditModal(item)}
-                    className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 text-sm"
+                    className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 text-sm"
                   >
                     <Edit className="h-4 w-4" />
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDeleteItem(item.id)}
-                    className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 bg-red-50 text-red-600 rounded hover:bg-red-100 text-sm"
+                    onClick={() => setDeleteConfirm(item.id)}
+                    className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 text-sm"
                   >
                     <Trash2 className="h-4 w-4" />
                     Delete
@@ -382,22 +335,33 @@ export default function AdminGallery() {
         </div>
 
         {gallery.length === 0 && (
-          <div className="text-center py-12">
-            <ImageIcon className="h-16 w-16 mx-auto text-gray-400 mb-4" />
-            <p className="text-gray-600 mb-4">No gallery items yet</p>
-            <button
-              onClick={() => {
+          <EmptyState
+            icon={ImageIcon}
+            title="No gallery items yet"
+            description="Upload your first image to get started"
+            action={{
+              label: "Add First Image",
+              onClick: () => {
                 resetForm();
                 setShowAddModal(true);
-              }}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#d4af37] px-4 py-2 text-sm font-medium text-white hover:bg-[#c4a137]"
-            >
-              <Plus className="h-4 w-4" />
-              Add First Image
-            </button>
-          </div>
+              }
+            }}
+          />
         )}
-      </main>
+      </div>
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={!!deleteConfirm}
+        onClose={() => setDeleteConfirm(null)}
+        onConfirm={() => deleteConfirm && handleDeleteItem(deleteConfirm)}
+        title="Delete Gallery Image"
+        message="Are you sure you want to delete this image? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        type="danger"
+        loading={deleting}
+      />
 
       {/* Add Modal */}
       {showAddModal && (
