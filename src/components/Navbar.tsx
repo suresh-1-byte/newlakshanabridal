@@ -132,7 +132,7 @@ export function Navbar() {
                 </motion.a>
               </nav>
               <div className="p-6 md:p-12 text-center text-xs tracking-[0.3em] text-[#f8f5f0]/40 uppercase">
-                Chennai · India
+                Chennai, India
               </div>
             </div>
           </motion.div>
