@@ -247,9 +247,9 @@ export default function AdminGallery() {
             resetForm();
             setShowAddModal(true);
           }}
-          className="btn-gold inline-flex items-center gap-2"
+          className="btn-gold inline-flex items-center gap-2 px-6 py-3 text-base font-semibold shadow-md hover:shadow-lg"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-5 h-5" />
           Add New Image
         </button>
       </div>
@@ -345,14 +345,14 @@ export default function AdminGallery() {
           />
         )}
 
-      {/* Delete Confirmation Dialog */}
+      {/* Confirm Booking Dialog (if needed) */}
       <ConfirmDialog
         isOpen={!!deleteConfirm}
         onClose={() => setDeleteConfirm(null)}
         onConfirm={() => deleteConfirm && handleDeleteItem(deleteConfirm)}
         title="Delete Gallery Image"
         message="Are you sure you want to delete this image? This action cannot be undone."
-        confirmText="Delete"
+        confirmText="Delete Image"
         cancelText="Cancel"
         type="danger"
         loading={deleting}

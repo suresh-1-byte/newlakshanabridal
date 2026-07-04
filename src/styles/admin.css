@@ -98,19 +98,34 @@
 .btn-gold {
   padding: 0.75rem 1.5rem;
   border-radius: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.3s;
-  background: linear-gradient(to right, #d4af37, #f4d35e);
+  background: linear-gradient(135deg, #d4af37 0%, #f4d35e 50%, #d4af37 100%);
+  background-size: 200% 100%;
   color: white;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+  border: none;
+  cursor: pointer;
 }
 
 .btn-gold:hover {
-  background: linear-gradient(to right, #f4d35e, #d4af37);
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  background-position: 100% 0;
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
   transform: translateY(-2px);
+}
+
+.btn-gold:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+.btn-gold:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* Loading Animations */
