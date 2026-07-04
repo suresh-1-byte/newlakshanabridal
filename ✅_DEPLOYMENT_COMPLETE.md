@@ -11,7 +11,7 @@
 
 ### Credentials:
 - **Email**: `sureshhkathirvel601@gmail.com`
-- **Password**: `Admin@k$12@`
+- **Password**: `Adminkaks12@`
 
 ---
 
