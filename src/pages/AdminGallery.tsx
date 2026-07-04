@@ -226,10 +226,6 @@ export default function AdminGallery() {
     setSelectedItem(null);
   };
 
-  const handleSignOut = async () => {
-    await signOut();
-  };
-
   if (loading) {
     return <LoadingSkeleton type="card" count={6} />;
   }
@@ -258,8 +254,8 @@ export default function AdminGallery() {
         </button>
       </div>
 
-        {/* Gallery Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {/* Gallery Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {gallery.map((item) => (
             <div key={item.id} className="glass-card rounded-xl overflow-hidden hover-lift">
               <div className="relative aspect-square">
@@ -348,7 +344,6 @@ export default function AdminGallery() {
             }}
           />
         )}
-      </div>
 
       {/* Delete Confirmation Dialog */}
       <ConfirmDialog
