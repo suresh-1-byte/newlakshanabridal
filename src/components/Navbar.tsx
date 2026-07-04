@@ -67,12 +67,6 @@ export function Navbar() {
             <a href="#book" className="btn-gold hidden md:inline-flex">
               <span>Book Appointment</span>
             </a>
-            <a href="/admin/login" className="hidden md:inline-flex items-center gap-2 px-6 py-3 border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#0d0d0d] transition-all duration-300 text-xs tracking-[0.2em] uppercase">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-              </svg>
-              <span>Login</span>
-            </a>
             <button
               aria-label="Open menu"
               onClick={() => setOpen(true)}
@@ -135,19 +129,6 @@ export function Navbar() {
                   className="btn-gold mt-8"
                 >
                   Book Appointment
-                </motion.a>
-                <motion.a
-                  href="/admin/login"
-                  onClick={() => setOpen(false)}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.85, duration: 0.7 }}
-                  className="flex items-center gap-3 px-8 py-4 border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#0d0d0d] transition-all duration-300 text-sm tracking-[0.2em] uppercase"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                  </svg>
-                  Login
                 </motion.a>
               </nav>
               <div className="p-6 md:p-12 text-center text-xs tracking-[0.3em] text-[#f8f5f0]/40 uppercase">
