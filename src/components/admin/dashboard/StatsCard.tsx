@@ -45,16 +45,17 @@ export default function StatsCard({
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <p
-            className={`text-sm font-medium ${
-              gradient ? "text-white/90" : "text-gray-600"
+            className={`text-sm font-bold uppercase tracking-wide ${
+              gradient ? "text-white/90" : "text-gray-700"
             }`}
           >
             {title}
           </p>
           <p
-            className={`mt-2 text-4xl font-bold ${
-              gradient ? "text-white" : "text-gray-900"
+            className={`mt-2 text-5xl font-extrabold tracking-tight ${
+              gradient ? "text-white drop-shadow-lg" : "text-gray-900"
             }`}
+            style={{ fontWeight: '900' }}
           >
             {value}
           </p>

@@ -184,8 +184,8 @@ export default function AdminDashboard() {
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-600">Completed</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.completedAppointments}</p>
+              <p className="text-sm font-bold text-gray-700 uppercase tracking-wide">Completed</p>
+              <p className="text-4xl font-extrabold text-gray-900" style={{ fontWeight: '900' }}>{stats.completedAppointments}</p>
             </div>
           </div>
         </motion.div>
@@ -201,8 +201,8 @@ export default function AdminDashboard() {
               <XCircle className="h-8 w-8 text-red-600" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-600">Cancelled</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.cancelledAppointments}</p>
+              <p className="text-sm font-bold text-gray-700 uppercase tracking-wide">Cancelled</p>
+              <p className="text-4xl font-extrabold text-gray-900" style={{ fontWeight: '900' }}>{stats.cancelledAppointments}</p>
             </div>
           </div>
         </motion.div>
@@ -218,8 +218,8 @@ export default function AdminDashboard() {
               <AlertCircle className="h-8 w-8 text-blue-600" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-600">Today's Appointments</p>
-              <p className="text-3xl font-bold text-gray-900">{stats.todayAppointments}</p>
+              <p className="text-sm font-bold text-gray-700 uppercase tracking-wide">Today's Appointments</p>
+              <p className="text-4xl font-extrabold text-gray-900" style={{ fontWeight: '900' }}>{stats.todayAppointments}</p>
             </div>
           </div>
         </motion.div>
@@ -289,22 +289,22 @@ export default function AdminDashboard() {
                     transition={{ delay: 0.1 * index }}
                     className="hover:bg-white/80 transition-colors"
                   >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900" style={{ fontSize: '15px', fontWeight: '700' }}>
                       {appointment.bookingReference}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900" style={{ fontSize: '15px', fontWeight: '600' }}>
                       {appointment.customerName || "N/A"}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {appointment.appointmentDate ? new Date(appointment.appointmentDate).toLocaleDateString() : "N/A"}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-700" style={{ fontSize: '14px', fontWeight: '600' }}>
+                      {appointment.appointmentDate ? new Date(appointment.appointmentDate).toLocaleDateString('en-IN') : "N/A"}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getStatusColor(appointment.status)}`}>
+                      <span className={`inline-flex rounded-full px-4 py-1.5 text-xs font-bold uppercase ${getStatusColor(appointment.status)}`} style={{ fontWeight: '700' }}>
                         {appointment.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      ₹{(appointment.totalAmount || 0).toLocaleString()}
+                    <td className="px-6 py-4 whitespace-nowrap text-base font-extrabold text-gray-900" style={{ fontSize: '16px', fontWeight: '800' }}>
+                      ₹{(appointment.totalAmount || 0).toLocaleString('en-IN')}
                     </td>
                   </motion.tr>
                 ))
