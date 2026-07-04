@@ -95,10 +95,10 @@ export default function Settings() {
                   {adminData?.fullName?.charAt(0) || "A"}
                 </div>
                 <div>
-                  <button className="btn-gold px-4 py-2 text-sm">
+                  <button className="px-6 py-3 bg-gradient-to-r from-[#d4af37] to-[#f4d35e] text-white rounded-xl font-semibold shadow-md hover:shadow-lg hover:from-[#f4d35e] hover:to-[#d4af37] transition-all duration-300 transform hover:-translate-y-0.5">
                     Change Photo
                   </button>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 mt-2">
                     JPG, PNG or GIF. Max 2MB
                   </p>
                 </div>
@@ -153,9 +153,9 @@ export default function Settings() {
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="btn-gold inline-flex items-center gap-2 disabled:opacity-50"
+                  className="px-8 py-3 bg-gradient-to-r from-[#d4af37] to-[#f4d35e] text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:from-[#f4d35e] hover:to-[#d4af37] transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-2 text-base"
                 >
-                  <Save className="w-4 h-4" />
+                  <Save className="w-5 h-5" />
                   {saving ? "Saving..." : "Save Changes"}
                 </button>
               </div>
@@ -261,7 +261,9 @@ export default function Settings() {
               </div>
 
               <div className="flex justify-end pt-4">
-                <button className="btn-gold">Update Password</button>
+                <button className="px-8 py-3 bg-gradient-to-r from-[#d4af37] to-[#f4d35e] text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:from-[#f4d35e] hover:to-[#d4af37] transition-all duration-300 transform hover:-translate-y-0.5 text-base">
+                  Update Password
+                </button>
               </div>
             </motion.div>
           )}

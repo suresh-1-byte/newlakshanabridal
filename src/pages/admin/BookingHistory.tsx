@@ -160,9 +160,9 @@ export default function BookingHistory() {
         <button
           onClick={exportToExcel}
           disabled={filteredBookings.length === 0}
-          className="btn-gold inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-6 py-3 bg-gradient-to-r from-[#d4af37] to-[#f4d35e] text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:from-[#f4d35e] hover:to-[#d4af37] transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-2 text-base"
         >
-          <Download className="w-4 h-4" />
+          <Download className="w-5 h-5" />
           Export to Excel
         </button>
       </div>

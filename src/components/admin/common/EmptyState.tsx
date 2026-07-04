@@ -31,7 +31,7 @@ export default function EmptyState({
       {action && (
         <button
           onClick={action.onClick}
-          className="btn-gold px-6 py-3 rounded-xl font-medium"
+          className="px-8 py-4 bg-gradient-to-r from-[#d4af37] to-[#f4d35e] text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:from-[#f4d35e] hover:to-[#d4af37] transition-all duration-300 transform hover:-translate-y-1 text-lg"
         >
           {action.label}
         </button>
