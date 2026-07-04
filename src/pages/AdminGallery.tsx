@@ -424,8 +424,10 @@ export default function AdminGallery() {
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-transparent"
+                    placeholder="e.g., Bridal Makeup, Traditional Look, Reception Style"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-transparent text-base"
                   />
+                  <p className="text-xs text-gray-500 mt-1">Give your image a descriptive title</p>
                 </div>
 
                 <div>
@@ -433,11 +435,13 @@ export default function AdminGallery() {
                     Description
                   </label>
                   <textarea
-                    rows={3}
+                    rows={4}
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-transparent"
+                    placeholder="Add details about the makeup style, occasion, or special features... (e.g., 'South Indian bridal look with temple jewelry and traditional kanjeevaram saree')"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-transparent text-base"
                   />
+                  <p className="text-xs text-gray-500 mt-1">Optional: Add more context about this image</p>
                 </div>
 
                 <div className="flex justify-end gap-3 mt-6">
@@ -525,8 +529,10 @@ export default function AdminGallery() {
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-transparent"
+                    placeholder="e.g., Bridal Makeup, Traditional Look, Reception Style"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-transparent text-base"
                   />
+                  <p className="text-xs text-gray-500 mt-1">Give your image a descriptive title</p>
                 </div>
 
                 <div>
@@ -534,11 +540,13 @@ export default function AdminGallery() {
                     Description
                   </label>
                   <textarea
-                    rows={3}
+                    rows={4}
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-transparent"
+                    placeholder="Add details about the makeup style, occasion, or special features... (e.g., 'South Indian bridal look with temple jewelry and traditional kanjeevaram saree')"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-transparent text-base"
                   />
+                  <p className="text-xs text-gray-500 mt-1">Optional: Add more context about this image</p>
                 </div>
 
                 <div className="flex justify-end gap-3 mt-6">
