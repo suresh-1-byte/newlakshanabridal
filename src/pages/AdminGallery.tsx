@@ -416,7 +416,7 @@ export default function AdminGallery() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-bold text-gray-900 mb-2">
                     Title *
                   </label>
                   <input
@@ -424,24 +424,61 @@ export default function AdminGallery() {
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    placeholder="e.g., Bridal Makeup, Traditional Look, Reception Style"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-transparent text-base"
+                    placeholder="e.g., Bridal Makeup, Traditional Look"
+                    style={{ color: '#000000', fontWeight: '600', fontSize: '16px' }}
+                    className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-[#d4af37] text-base bg-white"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Give your image a descriptive title</p>
+                  <p className="text-xs text-gray-700 mt-1 font-semibold">💡 Use quick fill buttons below or type your own</p>
+                </div>
+
+                {/* Quick Fill Buttons */}
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-300 rounded-xl p-4">
+                  <p className="text-sm font-bold text-gray-900 mb-3">⚡ Click to Auto-Fill:</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, title: 'South Indian Bridal Makeup', description: 'Traditional South Indian bridal look with temple jewelry and silk saree' })}
+                      className="px-3 py-2 bg-white border-2 border-blue-400 rounded-lg text-sm font-bold text-blue-700 hover:bg-blue-100 transition-all"
+                    >
+                      🌺 South Indian
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, title: 'Traditional Bridal Makeup', description: 'Classic bridal makeup with traditional jewelry and styling' })}
+                      className="px-3 py-2 bg-white border-2 border-purple-400 rounded-lg text-sm font-bold text-purple-700 hover:bg-purple-100 transition-all"
+                    >
+                      👰 Traditional
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, title: 'Reception Makeup Look', description: 'Glamorous reception makeup with modern styling' })}
+                      className="px-3 py-2 bg-white border-2 border-pink-400 rounded-lg text-sm font-bold text-pink-700 hover:bg-pink-100 transition-all"
+                    >
+                      ✨ Reception
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, title: 'Engagement Day Makeup', description: 'Soft and natural engagement makeup with delicate accessories' })}
+                      className="px-3 py-2 bg-white border-2 border-green-400 rounded-lg text-sm font-bold text-green-700 hover:bg-green-100 transition-all"
+                    >
+                      💍 Engagement
+                    </button>
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-bold text-gray-900 mb-2">
                     Description
                   </label>
                   <textarea
                     rows={4}
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Add details about the makeup style, occasion, or special features... (e.g., 'South Indian bridal look with temple jewelry and traditional kanjeevaram saree')"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-transparent text-base"
+                    placeholder="Add details about makeup style, occasion..."
+                    style={{ color: '#000000', fontWeight: '600', fontSize: '16px' }}
+                    className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-[#d4af37] text-base bg-white"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Optional: Add more context about this image</p>
+                  <p className="text-xs text-gray-700 mt-1 font-semibold">Optional - Quick fill buttons add this automatically!</p>
                 </div>
 
                 <div className="flex justify-end gap-3 mt-6">
@@ -521,7 +558,7 @@ export default function AdminGallery() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-bold text-gray-900 mb-2">
                     Title *
                   </label>
                   <input
@@ -529,24 +566,26 @@ export default function AdminGallery() {
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    placeholder="e.g., Bridal Makeup, Traditional Look, Reception Style"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-transparent text-base"
+                    placeholder="e.g., Bridal Makeup, Traditional Look"
+                    style={{ color: '#000000', fontWeight: '600', fontSize: '16px' }}
+                    className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-[#d4af37] text-base bg-white"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Give your image a descriptive title</p>
+                  <p className="text-xs text-gray-700 mt-1 font-semibold">Give your image a descriptive title</p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-bold text-gray-900 mb-2">
                     Description
                   </label>
                   <textarea
                     rows={4}
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Add details about the makeup style, occasion, or special features... (e.g., 'South Indian bridal look with temple jewelry and traditional kanjeevaram saree')"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-transparent text-base"
+                    placeholder="Add details about makeup style, occasion..."
+                    style={{ color: '#000000', fontWeight: '600', fontSize: '16px' }}
+                    className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-[#d4af37] focus:border-[#d4af37] text-base bg-white"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Optional: Add more context about this image</p>
+                  <p className="text-xs text-gray-700 mt-1 font-semibold">Optional: Add more context about this image</p>
                 </div>
 
                 <div className="flex justify-end gap-3 mt-6">
