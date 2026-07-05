@@ -14,10 +14,15 @@ html, body {
   box-sizing: border-box;
 }
 
-/* Navbar Fixes */
+/* ================================
+   CRITICAL NAVBAR FIXES
+   ================================ */
+
+/* Navbar container */
 header {
   width: 100%;
   max-width: 100vw;
+  overflow: hidden;
 }
 
 header .max-w-\[1500px\] {
@@ -25,19 +30,56 @@ header .max-w-\[1500px\] {
   padding-right: clamp(1rem, 3vw, 3rem);
 }
 
+/* Mobile Header - Stack elements properly */
+@media (max-width: 768px) {
+  header .max-w-\[1500px\] {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    gap: 0.5rem;
+  }
+  
+  /* Logo - smaller on mobile */
+  header img[alt*="logo"] {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+  
+  /* Hide logo text on very small screens */
+  header .font-display {
+    font-size: 1.125rem;
+  }
+  
+  header .text-\[9px\] {
+    font-size: 7px;
+  }
+}
+
+/* Extra small screens - hide branding text */
+@media (max-width: 400px) {
+  header .flex-col.leading-none {
+    display: none !important;
+  }
+}
+
 /* Book Appointment Button - Mobile Fix */
+.btn-gold {
+  font-size: 0.875rem !important;
+  padding: 0.625rem 1rem !important;
+  white-space: nowrap !important;
+}
+
 @media (max-width: 768px) {
   .btn-gold {
     font-size: 0.75rem !important;
     padding: 0.5rem 0.75rem !important;
-    white-space: nowrap !important;
   }
 }
 
 /* Mobile Menu Button */
 @media (max-width: 1023px) {
+  header .flex.items-center.gap-3,
   header .flex.items-center.gap-4 {
-    gap: 0.5rem;
+    gap: 0.5rem !important;
   }
 }
 

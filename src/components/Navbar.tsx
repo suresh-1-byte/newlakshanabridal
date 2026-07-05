@@ -36,15 +36,15 @@ export function Navbar() {
             : "py-8 bg-transparent"
         }`}
       >
-        <div className="max-w-[1500px] mx-auto px-6 md:px-12 flex items-center justify-between">
-          <a href="#home" className="flex items-center gap-3 leading-none" aria-label="Lakshana home">
+        <div className="max-w-[1500px] mx-auto px-6 md:px-12 flex items-center justify-between gap-4">
+          <a href="#home" className="flex items-center gap-3 leading-none flex-shrink-0" aria-label="Lakshana home">
             <img
               src="/logo.png"
               alt="Lakshana LP Bridal Atelier logo"
-              className="w-12 h-12 object-contain"
+              className="w-10 h-10 md:w-12 md:h-12 object-contain"
             />
-            <span className="flex flex-col leading-none">
-              <span className="font-display text-2xl tracking-[0.2em] text-[#f8f5f0]">
+            <span className="hidden sm:flex flex-col leading-none">
+              <span className="font-display text-xl md:text-2xl tracking-[0.2em] text-[#f8f5f0]">
                 LAKSHANA
               </span>
               <span className="text-[9px] tracking-[0.45em] text-[#d4af37] mt-1">
@@ -65,8 +65,8 @@ export function Navbar() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-4">
-            <a href="#book" className="btn-gold hidden md:inline-flex text-sm px-5 py-2.5">
+          <div className="flex items-center gap-3">
+            <a href="#book" className="hidden md:inline-flex btn-gold text-sm px-6 py-2.5 whitespace-nowrap">
               <span>Book Appointment</span>
             </a>
             <button
