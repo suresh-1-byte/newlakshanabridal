@@ -98,7 +98,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="absolute right-0 mt-2 w-80 glass-card rounded-xl shadow-xl z-20"
+                    className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] glass-card rounded-xl shadow-xl z-20 notification-dropdown"
                   >
                     <div className="p-4 border-b border-white/30 flex items-center justify-between">
                       <h3 className="font-extrabold text-gray-900 text-base" style={{ fontWeight: '900' }}>

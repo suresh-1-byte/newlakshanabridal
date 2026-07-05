@@ -66,13 +66,13 @@ export function Navbar() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <a href="#book" className="btn-gold hidden md:inline-flex">
+            <a href="#book" className="btn-gold hidden md:inline-flex text-sm px-5 py-2.5">
               <span>Book Appointment</span>
             </a>
             <button
               aria-label="Open menu"
               onClick={() => setOpen(true)}
-              className="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 border border-[#d4af37]/50"
+              className="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 border border-[#d4af37]/50 flex-shrink-0"
             >
               <span className="w-4 h-px bg-[#f8f5f0]" />
               <span className="w-4 h-px bg-[#f8f5f0]" />
