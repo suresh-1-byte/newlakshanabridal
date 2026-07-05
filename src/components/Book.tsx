@@ -6,6 +6,31 @@ import "react-day-picker/style.css";
 import { firebaseApi } from "../lib/firebaseApi";
 import { toast } from "sonner";
 
+// Google Sheets integration helper
+async function sendToGoogleSheets(type: 'booking' | 'enquiry', data: any) {
+  const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL'; // We'll add this later
+  
+  if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL') {
+    console.log('⚠️ Google Sheets integration not configured yet');
+    return;
+  }
+  
+  try {
+    const response = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ type, data }),
+    });
+    console.log('✅ Sent to Google Sheets');
+  } catch (error) {
+    console.error('Google Sheets error:', error);
+    throw error;
+  }
+}
+
 function Field({
   label,
   type = "text",
@@ -156,16 +181,38 @@ export function Book() {
     };
 
     try {
+      console.log('📅 Submitting booking:', data);
       const response = await firebaseApi.createBooking(data);
+      
       if (response.success) {
-        toast.success(response.message || 'Booking request submitted successfully!');
+        toast.success(response.message || '✅ Booking request submitted successfully!');
         (e.target as HTMLFormElement).reset();
+        
+        // Send to Google Sheets
+        try {
+          await sendToGoogleSheets('booking', {
+            bookingId: response.data?.bookingReference || 'N/A',
+            customerName: data.name,
+            phone: data.phone,
+            email: data.email,
+            service: data.service,
+            date: data.preferredDate ? new Date(data.preferredDate as string).toLocaleDateString() : 'N/A',
+            time: '10:00 AM', // Default time
+            message: data.message,
+            status: 'pending',
+            amount: 0,
+            createdAt: new Date().toISOString(),
+          });
+        } catch (sheetError) {
+          console.error('Google Sheets error (non-critical):', sheetError);
+          // Don't show error to user - data is already saved in Firebase
+        }
       } else {
-        toast.error(response.message || 'Failed to submit booking request');
+        toast.error(response.message || '❌ Failed to submit booking request');
       }
     } catch (error) {
       console.error('Booking submission error:', error);
-      toast.error('Failed to submit booking request. Please try again.');
+      toast.error('❌ Failed to submit booking request. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

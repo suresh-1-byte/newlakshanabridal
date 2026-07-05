@@ -12,6 +12,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useAuth } from "../../../contexts/FirebaseAuthContext";
+import { useNotifications } from "../../../hooks/useNotifications";
 
 interface TopBarProps {
   onMenuClick: () => void;
@@ -23,37 +24,14 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // Use real-time notifications
+  const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
 
   const handleSignOut = async () => {
     await signOut();
     navigate("/admin/login");
   };
-
-  const notifications = [
-    {
-      id: 1,
-      title: "New Booking",
-      message: "You have a new booking request",
-      time: "5 minutes ago",
-      unread: true,
-    },
-    {
-      id: 2,
-      title: "Payment Received",
-      message: "Payment of ₹15,000 received",
-      time: "1 hour ago",
-      unread: true,
-    },
-    {
-      id: 3,
-      title: "Booking Confirmed",
-      message: "Booking #BK12345 has been confirmed",
-      time: "3 hours ago",
-      unread: false,
-    },
-  ];
-
-  const unreadCount = notifications.filter((n) => n.unread).length;
 
   return (
     <header className="sticky top-0 z-20 glass-card shadow-soft">
@@ -122,48 +100,74 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
                     exit={{ opacity: 0, y: -10 }}
                     className="absolute right-0 mt-2 w-80 glass-card rounded-xl shadow-xl z-20"
                   >
-                    <div className="p-4 border-b border-white/30">
-                      <div className="flex items-center justify-between">
-                        <h3 className="font-extrabold text-gray-900 text-base" style={{ fontWeight: '900' }}>
-                          Notifications
-                        </h3>
+                    <div className="p-4 border-b border-white/30 flex items-center justify-between">
+                      <h3 className="font-extrabold text-gray-900 text-base" style={{ fontWeight: '900' }}>
+                        Notifications
+                      </h3>
+                      <div className="flex items-center gap-2">
                         {unreadCount > 0 && (
-                          <span className="text-sm text-[#C9A96E] font-extrabold" style={{ fontWeight: '800' }}>
-                            {unreadCount} new
-                          </span>
+                          <>
+                            <span className="text-sm text-[#C9A96E] font-extrabold" style={{ fontWeight: '800' }}>
+                              {unreadCount} new
+                            </span>
+                            <button
+                              onClick={() => markAllAsRead()}
+                              className="text-xs text-blue-600 hover:underline font-bold"
+                            >
+                              Mark all read
+                            </button>
+                          </>
                         )}
                       </div>
                     </div>
                     <div className="max-h-96 overflow-y-auto custom-scrollbar">
-                      {notifications.map((notification) => (
-                        <div
-                          key={notification.id}
-                          className={`p-4 border-b border-white/30 hover:bg-white/30 transition-colors cursor-pointer ${
-                            notification.unread ? "bg-[#C9A96E]/5" : ""
-                          }`}
-                        >
-                          <div className="flex items-start gap-3">
-                            <div
-                              className={`w-2 h-2 rounded-full mt-2 ${
-                                notification.unread
-                                  ? "bg-[#C9A96E]"
-                                  : "bg-gray-300"
-                              }`}
-                            />
-                            <div className="flex-1 min-w-0">
-                              <p className="text-base font-extrabold text-gray-900 truncate" style={{ fontWeight: '900' }}>
-                                {notification.title}
-                              </p>
-                              <p className="text-sm font-bold text-gray-800 mt-1" style={{ fontWeight: '700' }}>
-                                {notification.message}
-                              </p>
-                              <p className="text-sm font-bold text-gray-700 mt-1" style={{ fontWeight: '700' }}>
-                                {notification.time}
-                              </p>
+                      {notifications.length === 0 ? (
+                        <div className="p-8 text-center">
+                          <Bell className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                          <p className="text-gray-600 font-bold">No notifications yet</p>
+                          <p className="text-sm text-gray-500 mt-1">New bookings and enquiries will appear here</p>
+                        </div>
+                      ) : (
+                        notifications.map((notification) => (
+                          <div
+                            key={notification.id}
+                            onClick={() => {
+                              markAsRead(notification.id);
+                              // Navigate to relevant page
+                              if (notification.type === 'booking') {
+                                navigate('/admin/bookings');
+                              } else {
+                                navigate('/admin/enquiries');
+                              }
+                              setShowNotifications(false);
+                            }}
+                            className={`p-4 border-b border-white/30 hover:bg-white/30 transition-colors cursor-pointer ${
+                              !notification.read ? "bg-[#C9A96E]/5" : ""
+                            }`}
+                          >
+                            <div className="flex items-start gap-3">
+                              <div
+                                className={`w-2 h-2 rounded-full mt-2 ${
+                                  !notification.read
+                                    ? "bg-[#C9A96E]"
+                                    : "bg-gray-300"
+                                }`}
+                              />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-base font-extrabold text-gray-900" style={{ fontWeight: '900' }}>
+                                  {notification.title}
+                                </p>
+                                <p className="text-sm font-bold text-gray-800 mt-1" style={{ fontWeight: '700' }}>
+                                  {notification.message}
+                                </p>
+                                <p className="text-xs font-bold text-gray-600 mt-1" style={{ fontWeight: '600' }}>
+                                  {notification.timestamp.toLocaleString()}
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))
+                      )}
                     </div>
                     <div className="p-3 text-center border-t border-white/30">
                       <button className="text-sm text-[#C9A96E] hover:text-[#B8956A] font-medium">
