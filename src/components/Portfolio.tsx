@@ -34,19 +34,28 @@ export function Portfolio() {
 
   const loadGallery = async () => {
     try {
+      console.log('🔄 Loading gallery from Firebase...');
       const response = await firebaseApi.getGallery();
+      console.log('📦 Gallery response:', response);
+      
       if (response.success && response.data && response.data.length > 0) {
+        console.log('✅ Total gallery items:', response.data.length);
+        
         // Filter only published (isActive: true) images
         const publishedItems = response.data.filter((item: any) => item.isActive === true);
+        console.log('✅ Published items (isActive=true):', publishedItems.length);
         
         if (publishedItems.length > 0) {
           // Transform Firebase gallery items to match the format
           const galleryItems = publishedItems.map((item: any) => ({
             src: item.imageUrl || item.thumbnailUrl,
-            cat: item.categoryName || "Bridal",
+            cat: item.category || item.categoryName || "Bridal", // Support both fields
             title: item.title
           }));
           setItems(galleryItems);
+          console.log('✅ Loaded gallery items:', galleryItems.length);
+        } else {
+          console.log('⚠️ No published items found (isActive=true)');
         }
       }
     } catch (error) {

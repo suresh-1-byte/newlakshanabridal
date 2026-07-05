@@ -114,6 +114,78 @@ export default function AdminBookings() {
       }));
       ws['!cols'] = colWidths;
 
+      // Style header row with gold background
+      const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
+      for (let col = range.s.c; col <= range.e.c; col++) {
+        const cellAddress = XLSX.utils.encode_cell({ r: 0, c: col });
+        if (!ws[cellAddress]) continue;
+        
+        ws[cellAddress].s = {
+          fill: { fgColor: { rgb: "C9A96E" } },
+          font: { bold: true, color: { rgb: "FFFFFF" }, sz: 12 },
+          alignment: { horizontal: "center", vertical: "center" },
+          border: {
+            top: { style: "thin", color: { rgb: "000000" } },
+            bottom: { style: "thin", color: { rgb: "000000" } },
+            left: { style: "thin", color: { rgb: "000000" } },
+            right: { style: "thin", color: { rgb: "000000" } }
+          }
+        };
+      }
+
+      // Style status cells with colors
+      for (let row = range.s.r + 1; row <= range.e.r; row++) {
+        const statusCol = 7; // Status column (0-indexed)
+        const cellAddress = XLSX.utils.encode_cell({ r: row, c: statusCol });
+        if (!ws[cellAddress]) continue;
+        
+        const status = ws[cellAddress].v?.toString().toLowerCase();
+        let bgColor = "FFFFFF";
+        
+        if (status === "pending") bgColor = "FEF3C7"; // Yellow
+        else if (status === "confirmed") bgColor = "DBEAFE"; // Blue
+        else if (status === "in_progress") bgColor = "E9D5FF"; // Purple
+        else if (status === "completed") bgColor = "D1FAE5"; // Green
+        else if (status === "cancelled") bgColor = "FEE2E2"; // Red
+        else if (status === "rescheduled") bgColor = "FED7AA"; // Orange
+        else if (status === "no_show") bgColor = "E5E7EB"; // Gray
+        
+        ws[cellAddress].s = {
+          fill: { fgColor: { rgb: bgColor } },
+          font: { bold: true },
+          alignment: { horizontal: "center", vertical: "center" },
+          border: {
+            top: { style: "thin", color: { rgb: "000000" } },
+            bottom: { style: "thin", color: { rgb: "000000" } },
+            left: { style: "thin", color: { rgb: "000000" } },
+            right: { style: "thin", color: { rgb: "000000" } }
+          }
+        };
+      }
+
+      // Style amount cells
+      for (let row = range.s.r + 1; row <= range.e.r; row++) {
+        const totalAmountCol = 8; // Total Amount column
+        const paidAmountCol = 9; // Paid Amount column
+        
+        [totalAmountCol, paidAmountCol].forEach(col => {
+          const cellAddress = XLSX.utils.encode_cell({ r: row, c: col });
+          if (!ws[cellAddress]) return;
+          
+          ws[cellAddress].s = {
+            font: { bold: true, color: { rgb: "065F46" } },
+            alignment: { horizontal: "right", vertical: "center" },
+            numFmt: "₹#,##0",
+            border: {
+              top: { style: "thin", color: { rgb: "000000" } },
+              bottom: { style: "thin", color: { rgb: "000000" } },
+              left: { style: "thin", color: { rgb: "000000" } },
+              right: { style: "thin", color: { rgb: "000000" } }
+            }
+          };
+        });
+      }
+
       // Generate filename with current date
       const filename = `Lakshana_Bookings_${new Date().toISOString().split('T')[0]}.xlsx`;
 
@@ -235,44 +307,47 @@ export default function AdminBookings() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-serif font-bold text-gray-900">
+          <h1 className="text-4xl font-serif font-extrabold text-gray-900" style={{ fontWeight: '900' }}>
             Manage Bookings
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-gray-800 mt-2 font-bold text-lg" style={{ fontWeight: '700' }}>
             {filteredAppointments.length} of {appointments.length} bookings
-            <span className="ml-2 text-green-600">● Real-time updates</span>
+            <span className="ml-2 text-green-600 font-extrabold">● Real-time updates</span>
           </p>
         </div>
         <button
           onClick={exportToExcel}
           disabled={filteredAppointments.length === 0}
-          className="btn-gold inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-8 py-4 bg-gradient-to-r from-[#C9A96E] to-[#B8956A] text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 inline-flex items-center gap-3 text-lg font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ fontWeight: '800' }}
         >
-          <Download className="w-4 h-4" />
+          <Download className="w-6 h-6" />
           Export to Excel
         </button>
       </div>
 
       {/* Filters */}
-      <div className="glass-card rounded-2xl p-6">
+      <div className="glass-card rounded-2xl p-6 shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-600" />
             <input
               type="text"
               placeholder="Search by name, phone, booking ref..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-transparent"
+              className="w-full pl-12 pr-4 py-4 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-[#C9A96E] text-base font-semibold text-gray-900 placeholder-gray-600"
+              style={{ fontSize: '16px', fontWeight: '600' }}
             />
           </div>
 
           <div className="relative">
-            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-600 pointer-events-none" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-transparent appearance-none"
+              className="w-full pl-12 pr-4 py-4 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-[#C9A96E] appearance-none text-base font-bold text-gray-900 cursor-pointer"
+              style={{ fontSize: '16px', fontWeight: '700' }}
             >
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
@@ -300,24 +375,24 @@ export default function AdminBookings() {
         <div className="glass-card rounded-2xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200/50">
-              <thead className="bg-gray-50/50">
+              <thead className="bg-gradient-to-r from-gray-100 to-gray-50">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Booking Details
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Customer
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Date & Time
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Amount
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Actions
                   </th>
                 </tr>
@@ -332,27 +407,27 @@ export default function AdminBookings() {
                     className="hover:bg-white/80 transition-colors"
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-base font-extrabold text-gray-900" style={{ fontSize: '16px', fontWeight: '800' }}>
                         {appointment.bookingReference}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm font-bold text-gray-700 mt-1" style={{ fontWeight: '700' }}>
                         {appointment.serviceName || "General Service"}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-gray-400" />
+                        <User className="h-5 w-5 text-gray-600" />
                         <div>
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-base font-extrabold text-gray-900" style={{ fontSize: '15px', fontWeight: '800' }}>
                             {appointment.customerName || "N/A"}
                           </div>
-                          <div className="text-sm text-gray-500 flex items-center gap-1">
-                            <Phone className="h-3 w-3" />
+                          <div className="text-sm font-bold text-gray-700 flex items-center gap-1 mt-1" style={{ fontWeight: '700' }}>
+                            <Phone className="h-4 w-4" />
                             <a 
                               href={`https://wa.me/91${appointment.customerPhone?.replace(/[^0-9]/g, '')}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="hover:text-green-600 hover:underline"
+                              className="hover:text-green-600 hover:underline font-bold"
                               title="Open WhatsApp"
                             >
                               {appointment.customerPhone || "N/A"}
@@ -362,11 +437,11 @@ export default function AdminBookings() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
+                      <div className="text-base font-extrabold text-gray-900" style={{ fontSize: '15px', fontWeight: '800' }}>
                         {appointment.appointmentDate ? new Date(appointment.appointmentDate).toLocaleDateString() : "N/A"}
                       </div>
-                      <div className="text-sm text-gray-500 flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
+                      <div className="text-sm font-bold text-gray-700 flex items-center gap-1 mt-1" style={{ fontWeight: '700' }}>
+                        <Clock className="h-4 w-4" />
                         {appointment.appointmentTime || "N/A"}
                       </div>
                     </td>
@@ -378,7 +453,8 @@ export default function AdminBookings() {
                         }
                         className={`status-badge ${getStatusColor(
                           appointment.status
-                        )} border-0 cursor-pointer text-xs font-semibold px-3 py-1 rounded-full`}
+                        )} border-2 cursor-pointer text-sm font-extrabold px-4 py-2 rounded-full shadow-sm hover:shadow-md transition-all`}
+                        style={{ fontWeight: '800', fontSize: '14px' }}
                       >
                         <option value="pending">Pending</option>
                         <option value="confirmed">Confirmed</option>
@@ -390,12 +466,12 @@ export default function AdminBookings() {
                       </select>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 flex items-center gap-1">
-                        <DollarSign className="h-3 w-3" />
-                        ₹{(appointment.totalAmount || 0).toLocaleString()}
+                      <div className="text-lg font-extrabold text-gray-900 flex items-center gap-1" style={{ fontSize: '17px', fontWeight: '900' }}>
+                        <DollarSign className="h-5 w-5" />
+                        ₹{(appointment.totalAmount || 0).toLocaleString('en-IN')}
                       </div>
-                      <div className="text-sm text-gray-500">
-                        Paid: ₹{(appointment.paidAmount || 0).toLocaleString()}
+                      <div className="text-sm font-bold text-green-700 mt-1" style={{ fontWeight: '700' }}>
+                        Paid: ₹{(appointment.paidAmount || 0).toLocaleString('en-IN')}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -403,10 +479,11 @@ export default function AdminBookings() {
                         {appointment.status === "pending" && (
                           <button
                             onClick={() => setConfirmBooking(appointment)}
-                            className="px-3 py-1.5 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all shadow-sm hover:shadow-md flex items-center gap-1.5 font-medium"
+                            className="px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 flex items-center gap-2 font-extrabold text-sm"
                             title="Confirm Booking"
+                            style={{ fontWeight: '800' }}
                           >
-                            <CheckCircle className="h-4 w-4" />
+                            <CheckCircle className="h-5 w-5" />
                             Confirm
                           </button>
                         )}
@@ -415,17 +492,17 @@ export default function AdminBookings() {
                             setSelectedAppointment(appointment);
                             setShowDetails(true);
                           }}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-blue-200 hover:border-blue-300"
+                          className="p-3 text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-all border-2 border-blue-300 hover:border-blue-400 shadow-sm hover:shadow-md"
                           title="View Details"
                         >
-                          <Eye className="h-4 w-4" />
+                          <Eye className="h-5 w-5" />
                         </button>
                         <button
                           onClick={() => setDeleteConfirm(appointment.id)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-red-200 hover:border-red-300"
+                          className="p-3 text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-all border-2 border-red-300 hover:border-red-400 shadow-sm hover:shadow-md"
                           title="Delete"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-5 w-5" />
                         </button>
                       </div>
                     </td>
@@ -563,11 +640,11 @@ export default function AdminBookings() {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="bg-white/70 p-3 rounded-lg">
                     <span className="text-gray-600 block mb-1 text-xs font-semibold uppercase">Total Amount</span>
-                    <p className="font-bold text-gray-900 text-xl">₹{(selectedAppointment.totalAmount || 0).toLocaleString()}</p>
+                    <p className="font-bold text-gray-900 text-xl">₹{(selectedAppointment.totalAmount || 0).toLocaleString('en-IN')}</p>
                   </div>
                   <div className="bg-white/70 p-3 rounded-lg">
                     <span className="text-gray-600 block mb-1 text-xs font-semibold uppercase">Paid Amount</span>
-                    <p className="font-bold text-green-600 text-xl">₹{(selectedAppointment.paidAmount || 0).toLocaleString()}</p>
+                    <p className="font-bold text-green-600 text-xl">₹{(selectedAppointment.paidAmount || 0).toLocaleString('en-IN')}</p>
                   </div>
                   <div className="bg-white/70 p-3 rounded-lg col-span-2">
                     <span className="text-gray-600 block mb-1 text-xs font-semibold uppercase">Payment Status</span>

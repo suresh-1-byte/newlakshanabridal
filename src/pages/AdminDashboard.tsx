@@ -160,7 +160,7 @@ export default function AdminDashboard() {
         
         <StatsCard
           title="Total Revenue"
-          value={`₹${stats.totalRevenue.toLocaleString()}`}
+          value={`₹${stats.totalRevenue.toLocaleString('en-IN')}`}
           subtitle="Completed bookings"
           icon={DollarSign}
           iconColor="text-white"

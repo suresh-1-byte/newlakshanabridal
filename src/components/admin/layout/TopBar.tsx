@@ -124,11 +124,11 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
                   >
                     <div className="p-4 border-b border-white/30">
                       <div className="flex items-center justify-between">
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-extrabold text-gray-900 text-base" style={{ fontWeight: '900' }}>
                           Notifications
                         </h3>
                         {unreadCount > 0 && (
-                          <span className="text-xs text-[#C9A96E] font-medium">
+                          <span className="text-sm text-[#C9A96E] font-extrabold" style={{ fontWeight: '800' }}>
                             {unreadCount} new
                           </span>
                         )}
@@ -151,13 +151,13 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
                               }`}
                             />
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-gray-900 truncate">
+                              <p className="text-base font-extrabold text-gray-900 truncate" style={{ fontWeight: '900' }}>
                                 {notification.title}
                               </p>
-                              <p className="text-xs text-gray-600 mt-1">
+                              <p className="text-sm font-bold text-gray-800 mt-1" style={{ fontWeight: '700' }}>
                                 {notification.message}
                               </p>
-                              <p className="text-xs text-gray-400 mt-1">
+                              <p className="text-sm font-bold text-gray-700 mt-1" style={{ fontWeight: '700' }}>
                                 {notification.time}
                               </p>
                             </div>
@@ -186,10 +186,10 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
                 {adminData?.fullName?.charAt(0) || "A"}
               </div>
               <div className="hidden md:block text-left">
-                <p className="text-sm font-semibold text-gray-900">
+                <p className="text-base font-extrabold text-gray-900" style={{ fontWeight: '900' }}>
                   {adminData?.fullName || "Admin"}
                 </p>
-                <p className="text-xs text-gray-600">
+                <p className="text-sm font-bold text-gray-800" style={{ fontWeight: '700' }}>
                   {adminData?.role || "Administrator"}
                 </p>
               </div>
@@ -211,10 +211,10 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
                     className="absolute right-0 mt-2 w-56 glass-card rounded-xl shadow-xl z-20"
                   >
                     <div className="p-4 border-b border-white/30">
-                      <p className="text-sm font-semibold text-gray-900 truncate">
+                      <p className="text-base font-extrabold text-gray-900 truncate" style={{ fontWeight: '900' }}>
                         {adminData?.fullName || "Admin"}
                       </p>
-                      <p className="text-xs text-gray-600 truncate">
+                      <p className="text-sm font-bold text-gray-800 truncate" style={{ fontWeight: '700' }}>
                         {adminData?.email || "admin@lakshana.com"}
                       </p>
                     </div>
@@ -224,16 +224,16 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
                         className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/50 transition-colors"
                         onClick={() => setShowProfileMenu(false)}
                       >
-                        <User className="w-4 h-4 text-gray-600" />
-                        <span className="text-sm text-gray-700">Profile</span>
+                        <User className="w-5 h-5 text-gray-700" />
+                        <span className="text-base font-extrabold text-gray-900" style={{ fontWeight: '800' }}>Profile</span>
                       </Link>
                       <Link
                         to="/admin/settings"
                         className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/50 transition-colors"
                         onClick={() => setShowProfileMenu(false)}
                       >
-                        <Settings className="w-4 h-4 text-gray-600" />
-                        <span className="text-sm text-gray-700">Settings</span>
+                        <Settings className="w-5 h-5 text-gray-700" />
+                        <span className="text-base font-extrabold text-gray-900" style={{ fontWeight: '800' }}>Settings</span>
                       </Link>
                     </div>
                     <div className="p-2 border-t border-white/30">
@@ -241,8 +241,8 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
                         onClick={handleSignOut}
                         className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 transition-colors w-full text-left"
                       >
-                        <LogOut className="w-4 h-4 text-red-600" />
-                        <span className="text-sm text-red-600 font-medium">
+                        <LogOut className="w-5 h-5 text-red-600" />
+                        <span className="text-base text-red-600 font-extrabold" style={{ fontWeight: '900' }}>
                           Sign Out
                         </span>
                       </button>

@@ -277,9 +277,11 @@ export const firebaseApi = {
         imageUrl: data.imageUrl,
         thumbnailUrl: data.thumbnailUrl || data.imageUrl,
         type: data.type,
+        category: "Bridal", // Add default category for website display
         categoryId: data.categoryId || null,
+        categoryName: "Bridal", // Add categoryName for backward compatibility
         tags: data.tags || [],
-        isActive: true,
+        isActive: true, // Published by default
         isFeatured: false,
         displayOrder: 0,
         views: 0,

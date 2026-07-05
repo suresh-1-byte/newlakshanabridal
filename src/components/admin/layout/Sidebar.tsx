@@ -10,6 +10,7 @@ import {
   Crown,
   Sparkles,
   X,
+  MessageSquare,
 } from "lucide-react";
 import { useAuth } from "../../../contexts/FirebaseAuthContext";
 
@@ -37,6 +38,12 @@ const menuItems = [
     icon: History,
     path: "/admin/booking-history",
     color: "text-purple-600",
+  },
+  {
+    name: "Enquiries",
+    icon: MessageSquare,
+    path: "/admin/enquiries",
+    color: "text-indigo-600",
   },
   {
     name: "Customers",
@@ -71,9 +78,9 @@ export default function Sidebar({ isOpen, mobileOpen, onClose }: SidebarProps) {
             <Crown className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-serif font-bold text-gray-900">Lakshana</h1>
-            <p className="text-xs text-gray-600 flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-[#C9A96E]" />
+            <h1 className="text-2xl font-serif font-extrabold text-gray-900" style={{ fontWeight: '900' }}>Lakshana</h1>
+            <p className="text-sm font-bold text-gray-800 flex items-center gap-1" style={{ fontWeight: '700' }}>
+              <Sparkles className="w-4 h-4 text-[#C9A96E]" />
               Admin Panel
             </p>
           </div>
@@ -95,10 +102,10 @@ export default function Sidebar({ isOpen, mobileOpen, onClose }: SidebarProps) {
             {adminData?.fullName?.charAt(0) || "A"}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-gray-900 truncate">
+            <p className="text-base font-extrabold text-gray-900 truncate" style={{ fontWeight: '900' }}>
               {adminData?.fullName || "Admin"}
             </p>
-            <p className="text-xs text-gray-600 truncate">
+            <p className="text-sm font-bold text-gray-800 truncate" style={{ fontWeight: '700' }}>
               {adminData?.role || "Administrator"}
             </p>
           </div>
@@ -133,9 +140,10 @@ export default function Sidebar({ isOpen, mobileOpen, onClose }: SidebarProps) {
                   className={`w-5 h-5 ${isActive ? "text-[#C9A96E]" : item.color}`}
                 />
                 <span
-                  className={`text-sm font-medium ${
-                    isActive ? "text-gray-900" : "text-gray-700"
+                  className={`text-base font-extrabold ${
+                    isActive ? "text-gray-900" : "text-gray-800"
                   }`}
+                  style={{ fontWeight: isActive ? '900' : '800' }}
                 >
                   {item.name}
                 </span>
@@ -149,10 +157,10 @@ export default function Sidebar({ isOpen, mobileOpen, onClose }: SidebarProps) {
       <div className="p-4 border-t border-white/30">
         <div className="glass-card rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
-            <Crown className="w-4 h-4 text-[#C9A96E]" />
-            <span className="text-xs font-semibold text-gray-900">Premium Admin</span>
+            <Crown className="w-5 h-5 text-[#C9A96E]" />
+            <span className="text-sm font-extrabold text-gray-900" style={{ fontWeight: '900' }}>Premium Admin</span>
           </div>
-          <p className="text-xs text-gray-600">
+          <p className="text-sm font-bold text-gray-800" style={{ fontWeight: '700' }}>
             Version 2.0 • All features enabled
           </p>
         </div>

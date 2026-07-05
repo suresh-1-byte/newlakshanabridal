@@ -19,8 +19,9 @@ service firebase.storage {
     
     // Gallery images - admins can upload, everyone can read
     match /gallery/{allPaths=**} {
-      allow read: if true;
-      allow write: if isAuthenticated() && isImage() && isUnder10MB();
+      allow read: if true; // Anyone can read (view images on website)
+      allow write: if isAuthenticated(); // Only authenticated users can upload
+      allow delete: if isAuthenticated(); // Only authenticated users can delete
     }
     
     // Service images - admins can upload, everyone can read

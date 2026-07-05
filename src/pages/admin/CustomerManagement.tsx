@@ -80,24 +80,25 @@ export default function CustomerManagement() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-serif font-bold text-gray-900">
+        <h1 className="text-4xl font-serif font-extrabold text-gray-900" style={{ fontWeight: '900' }}>
           Customer Management
         </h1>
-        <p className="text-gray-600 mt-1">
+        <p className="text-gray-800 mt-2 font-bold text-lg" style={{ fontWeight: '700' }}>
           {filteredCustomers.length} of {customers.length} customers
         </p>
       </div>
 
       {/* Search */}
-      <div className="glass-card rounded-2xl p-4">
+      <div className="glass-card rounded-2xl p-6 shadow-lg">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-600" />
           <input
             type="text"
             placeholder="Search by name, phone, or email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-transparent"
+            className="w-full pl-12 pr-4 py-4 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-[#C9A96E] text-base font-bold text-gray-900 placeholder-gray-600"
+            style={{ fontSize: '16px', fontWeight: '700' }}
           />
         </div>
       </div>
@@ -115,21 +116,21 @@ export default function CustomerManagement() {
         <div className="glass-card rounded-2xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200/50">
-              <thead className="bg-gray-50/50">
+              <thead className="bg-gradient-to-r from-gray-100 to-gray-50">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Customer
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Contact
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Bookings
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Total Spent
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Status
                   </th>
                 </tr>
@@ -145,47 +146,48 @@ export default function CustomerManagement() {
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C9A96E] to-[#B8956A] flex items-center justify-center text-white font-bold">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#C9A96E] to-[#B8956A] flex items-center justify-center text-white font-extrabold text-xl shadow-md" style={{ fontWeight: '900' }}>
                           {customer.fullName?.charAt(0) || "C"}
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-base font-extrabold text-gray-900" style={{ fontSize: '16px', fontWeight: '800' }}>
                             {customer.fullName}
                           </div>
-                          <div className="text-xs text-gray-500">
+                          <div className="text-sm font-bold text-gray-700 mt-1" style={{ fontWeight: '700' }}>
                             Joined{" "}
-                            {customer.createdAt?.toDate?.().toLocaleDateString() || "N/A"}
+                            {customer.createdAt?.toDate?.().toLocaleDateString('en-IN') || "N/A"}
                           </div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2 text-sm text-gray-700">
-                          <Phone className="w-4 h-4 text-gray-400" />
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-base font-bold text-gray-900" style={{ fontSize: '15px', fontWeight: '800' }}>
+                          <Phone className="w-5 h-5 text-gray-700" />
                           {customer.phone}
                         </div>
                         {customer.email && (
-                          <div className="flex items-center gap-2 text-sm text-gray-500">
-                            <Mail className="w-4 h-4 text-gray-400" />
+                          <div className="flex items-center gap-2 text-sm font-bold text-gray-700" style={{ fontWeight: '700' }}>
+                            <Mail className="w-4 h-4 text-gray-600" />
                             {customer.email}
                           </div>
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap text-base font-extrabold text-gray-900" style={{ fontSize: '16px', fontWeight: '800' }}>
                       {customer.totalBookings || 0} bookings
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      ₹{(customer.totalSpent || 0).toLocaleString()}
+                    <td className="px-6 py-4 whitespace-nowrap text-lg font-extrabold text-gray-900" style={{ fontSize: '17px', fontWeight: '900' }}>
+                      ₹{(customer.totalSpent || 0).toLocaleString('en-IN')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`status-badge ${
+                        className={`status-badge px-4 py-2 text-sm font-extrabold ${
                           customer.status === "active"
                             ? "status-confirmed"
                             : "bg-gray-100 text-gray-800"
                         }`}
+                        style={{ fontWeight: '800' }}
                       >
                         {customer.status || "active"}
                       </span>

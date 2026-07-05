@@ -9,6 +9,7 @@ import AdminBookings from './pages/AdminBookings';
 import AdminGallery from './pages/AdminGallery';
 import BookingHistory from './pages/admin/BookingHistory';
 import CustomerManagement from './pages/admin/CustomerManagement';
+import Enquiries from './pages/admin/Enquiries';
 import Settings from './pages/admin/Settings';
 import TestBooking from './pages/TestBooking';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -37,6 +38,7 @@ function App() {
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="bookings" element={<AdminBookings />} />
           <Route path="booking-history" element={<BookingHistory />} />
+          <Route path="enquiries" element={<Enquiries />} />
           <Route path="customers" element={<CustomerManagement />} />
           <Route path="gallery" element={<AdminGallery />} />
           <Route path="settings" element={<Settings />} />

@@ -116,9 +116,87 @@ export default function BookingHistory() {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Booking History");
 
+    // Auto-size columns
+    const maxWidth = 30;
+    const colWidths = Object.keys(exportData[0] || {}).map(key => ({
+      wch: Math.min(maxWidth, Math.max(key.length, 10))
+    }));
+    ws['!cols'] = colWidths;
+
+    // Style header row with gold background
+    const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
+    for (let col = range.s.c; col <= range.e.c; col++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: col });
+      if (!ws[cellAddress]) continue;
+      
+      ws[cellAddress].s = {
+        fill: { fgColor: { rgb: "C9A96E" } },
+        font: { bold: true, color: { rgb: "FFFFFF" }, sz: 12 },
+        alignment: { horizontal: "center", vertical: "center" },
+        border: {
+          top: { style: "thin", color: { rgb: "000000" } },
+          bottom: { style: "thin", color: { rgb: "000000" } },
+          left: { style: "thin", color: { rgb: "000000" } },
+          right: { style: "thin", color: { rgb: "000000" } }
+        }
+      };
+    }
+
+    // Style status cells with colors
+    for (let row = range.s.r + 1; row <= range.e.r; row++) {
+      const statusCol = 6; // Status column (0-indexed)
+      const cellAddress = XLSX.utils.encode_cell({ r: row, c: statusCol });
+      if (!ws[cellAddress]) continue;
+      
+      const status = ws[cellAddress].v?.toString().toLowerCase();
+      let bgColor = "FFFFFF";
+      
+      if (status === "pending") bgColor = "FEF3C7"; // Yellow
+      else if (status === "confirmed") bgColor = "DBEAFE"; // Blue
+      else if (status === "in_progress") bgColor = "E9D5FF"; // Purple
+      else if (status === "completed") bgColor = "D1FAE5"; // Green
+      else if (status === "cancelled") bgColor = "FEE2E2"; // Red
+      else if (status === "rescheduled") bgColor = "FED7AA"; // Orange
+      else if (status === "no_show") bgColor = "E5E7EB"; // Gray
+      
+      ws[cellAddress].s = {
+        fill: { fgColor: { rgb: bgColor } },
+        font: { bold: true },
+        alignment: { horizontal: "center", vertical: "center" },
+        border: {
+          top: { style: "thin", color: { rgb: "000000" } },
+          bottom: { style: "thin", color: { rgb: "000000" } },
+          left: { style: "thin", color: { rgb: "000000" } },
+          right: { style: "thin", color: { rgb: "000000" } }
+        }
+      };
+    }
+
+    // Style amount column
+    for (let row = range.s.r + 1; row <= range.e.r; row++) {
+      const amountCol = 7; // Amount column
+      const cellAddress = XLSX.utils.encode_cell({ r: row, c: amountCol });
+      if (!ws[cellAddress]) continue;
+      
+      ws[cellAddress].s = {
+        font: { bold: true, color: { rgb: "065F46" } },
+        alignment: { horizontal: "right", vertical: "center" },
+        numFmt: "₹#,##0",
+        border: {
+          top: { style: "thin", color: { rgb: "000000" } },
+          bottom: { style: "thin", color: { rgb: "000000" } },
+          left: { style: "thin", color: { rgb: "000000" } },
+          right: { style: "thin", color: { rgb: "000000" } }
+        }
+      };
+    }
+
     const filename = `Booking_History_${new Date().toISOString().split("T")[0]}.xlsx`;
     XLSX.writeFile(wb, filename);
+    
+    toast.success(`✅ Exported ${exportData.length} bookings successfully!`);
   };
+
 
   const handleDeleteBooking = async (bookingId: string) => {
     try {
@@ -173,35 +251,37 @@ export default function BookingHistory() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-serif font-bold text-gray-900">
+          <h1 className="text-4xl font-serif font-extrabold text-gray-900" style={{ fontWeight: '900' }}>
             Booking History
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-gray-800 mt-2 font-bold text-lg" style={{ fontWeight: '700' }}>
             {filteredBookings.length} of {bookings.length} bookings
           </p>
         </div>
         <button
           onClick={exportToExcel}
           disabled={filteredBookings.length === 0}
-          className="px-6 py-3 bg-gradient-to-r from-[#d4af37] to-[#f4d35e] text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:from-[#f4d35e] hover:to-[#d4af37] transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-2 text-base"
+          className="px-8 py-4 bg-gradient-to-r from-[#C9A96E] to-[#B8956A] text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 inline-flex items-center gap-3 text-lg font-extrabold disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ fontWeight: '900' }}
         >
-          <Download className="w-5 h-5" />
+          <Download className="w-6 h-6" />
           Export to Excel
         </button>
       </div>
 
       {/* Filters */}
-      <div className="glass-card rounded-2xl p-6">
+      <div className="glass-card rounded-2xl p-6 shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              <Filter className="w-4 h-4 inline mr-2" />
+            <label className="block text-base font-extrabold text-gray-900 mb-3" style={{ fontWeight: '800' }}>
+              <Filter className="w-5 h-5 inline mr-2" />
               Filter by Status
             </label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-transparent"
+              className="w-full px-4 py-4 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-[#C9A96E] text-base font-bold text-gray-900 cursor-pointer"
+              style={{ fontSize: '16px', fontWeight: '700' }}
             >
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
@@ -211,14 +291,15 @@ export default function BookingHistory() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              <Calendar className="w-4 h-4 inline mr-2" />
+            <label className="block text-base font-extrabold text-gray-900 mb-3" style={{ fontWeight: '800' }}>
+              <Calendar className="w-5 h-5 inline mr-2" />
               Filter by Date
             </label>
             <select
               value={dateFilter}
               onChange={(e) => setDateFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-transparent"
+              className="w-full px-4 py-4 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-[#C9A96E] text-base font-bold text-gray-900 cursor-pointer"
+              style={{ fontSize: '16px', fontWeight: '700' }}
             >
               <option value="all">All Time</option>
               <option value="today">Today</option>
@@ -243,27 +324,27 @@ export default function BookingHistory() {
         <div className="glass-card rounded-2xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200/50">
-              <thead className="bg-gray-50/50">
+              <thead className="bg-gradient-to-r from-gray-100 to-gray-50">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Booking Ref
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Customer
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Service
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Date
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Amount
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-5 text-left text-sm font-extrabold text-gray-900 uppercase tracking-wider" style={{ fontWeight: '900' }}>
                     Actions
                   </th>
                 </tr>
@@ -277,45 +358,45 @@ export default function BookingHistory() {
                     transition={{ delay: index * 0.05 }}
                     className="hover:bg-white/80 transition-colors"
                   >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-base font-extrabold text-gray-900" style={{ fontSize: '16px', fontWeight: '800' }}>
                       {booking.bookingReference}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-base font-extrabold text-gray-900" style={{ fontSize: '15px', fontWeight: '800' }}>
                         {booking.customerName}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm font-bold text-gray-700 mt-1" style={{ fontWeight: '700' }}>
                         {booking.customerPhone}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap text-base font-bold text-gray-900" style={{ fontSize: '15px', fontWeight: '700' }}>
                       {booking.serviceName || "N/A"}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
+                      <div className="text-base font-extrabold text-gray-900" style={{ fontSize: '15px', fontWeight: '800' }}>
                         {booking.appointmentDate
-                          ? new Date(booking.appointmentDate).toLocaleDateString()
+                          ? new Date(booking.appointmentDate).toLocaleDateString('en-IN')
                           : "N/A"}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm font-bold text-gray-700 mt-1" style={{ fontWeight: '700' }}>
                         {booking.appointmentTime || "N/A"}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`status-badge ${getStatusColor(booking.status)}`}>
+                      <span className={`status-badge ${getStatusColor(booking.status)} px-4 py-2 text-sm font-extrabold`} style={{ fontWeight: '800' }}>
                         {booking.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      ₹{(booking.totalAmount || 0).toLocaleString()}
+                    <td className="px-6 py-4 whitespace-nowrap text-lg font-extrabold text-gray-900" style={{ fontSize: '17px', fontWeight: '900' }}>
+                      ₹{(booking.totalAmount || 0).toLocaleString('en-IN')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={() => setDeleteConfirm(booking.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-red-200 hover:border-red-300"
+                        className="p-3 text-red-700 bg-red-50 hover:bg-red-100 rounded-lg transition-all border-2 border-red-300 hover:border-red-400 shadow-sm hover:shadow-md"
                         title="Delete Booking"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-5 w-5" />
                       </button>
                     </td>
                   </motion.tr>

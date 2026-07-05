@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { firebaseApi } from "../lib/firebaseApi";
-import { storage } from "../lib/firebase";
+import { storage, auth } from "../lib/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
   Plus,
@@ -81,13 +81,33 @@ export default function AdminGallery() {
   };
 
   const uploadImage = async (file: File): Promise<string> => {
-    const timestamp = Date.now();
-    const filename = `gallery/${timestamp}_${file.name}`;
-    const storageRef = ref(storage, filename);
-    
-    await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
-    return url;
+    try {
+      console.log('📤 Processing image...');
+      console.log('File:', file.name, 'Size:', (file.size / 1024).toFixed(2), 'KB');
+
+      // Check file size (limit to 1MB for Firestore)
+      const maxSize = 1 * 1024 * 1024; // 1MB
+      if (file.size > maxSize) {
+        throw new Error('Image too large. Please use an image smaller than 1MB.');
+      }
+
+      // Convert to base64 data URL
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
+      console.log('✅ Image converted to data URL');
+      
+      // Return the data URL (will be stored directly in Firestore)
+      return dataUrl;
+    } catch (error: any) {
+      console.error('❌ Error processing image:', error);
+      toast.error(`Failed: ${error.message || 'Please try again'}`);
+      throw error;
+    }
   };
 
   const handleAddItem = async (e: React.FormEvent) => {
@@ -235,10 +255,10 @@ export default function AdminGallery() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-serif font-bold text-gray-900">
+          <h1 className="text-4xl font-serif font-extrabold text-gray-900" style={{ fontWeight: '900' }}>
             Gallery Management
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-gray-800 mt-2 font-bold text-lg" style={{ fontWeight: '700' }}>
             {gallery.length} items in gallery
           </p>
         </div>
@@ -247,9 +267,10 @@ export default function AdminGallery() {
             resetForm();
             setShowAddModal(true);
           }}
-          className="btn-gold inline-flex items-center gap-2 px-6 py-3 text-base font-semibold shadow-md hover:shadow-lg"
+          className="px-8 py-4 bg-gradient-to-r from-[#C9A96E] to-[#B8956A] text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 inline-flex items-center gap-3 text-lg font-extrabold"
+          style={{ fontWeight: '900' }}
         >
-          <Plus className="w-5 h-5" />
+          <Plus className="w-6 h-6" />
           Add New Image
         </button>
       </div>
@@ -280,29 +301,30 @@ export default function AdminGallery() {
                 </div>
               </div>
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
+                <h3 className="font-extrabold text-gray-900 mb-2 text-lg" style={{ fontWeight: '900' }}>{item.title}</h3>
                 {item.description && (
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">{item.description}</p>
+                  <p className="text-sm font-bold text-gray-700 mb-3 line-clamp-2" style={{ fontWeight: '700' }}>{item.description}</p>
                 )}
                 
                 {/* Publish/Unpublish Toggle */}
                 <div className="mb-3">
                   <button
                     onClick={() => handleTogglePublish(item.id, item.isActive)}
-                    className={`w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    className={`w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-sm font-extrabold transition-all shadow-md hover:shadow-lg border-2 ${
                       item.isActive
-                        ? 'bg-yellow-50 text-yellow-700 hover:bg-yellow-100'
-                        : 'bg-green-50 text-green-700 hover:bg-green-100'
+                        ? 'bg-yellow-50 text-yellow-800 hover:bg-yellow-100 border-yellow-300'
+                        : 'bg-green-50 text-green-800 hover:bg-green-100 border-green-300'
                     }`}
+                    style={{ fontWeight: '800' }}
                   >
                     {item.isActive ? (
                       <>
-                        <EyeOff className="h-4 w-4" />
+                        <EyeOff className="h-5 w-5" />
                         Unpublish from Website
                       </>
                     ) : (
                       <>
-                        <Eye className="h-4 w-4" />
+                        <Eye className="h-5 w-5" />
                         Publish to Website
                       </>
                     )}
@@ -312,16 +334,18 @@ export default function AdminGallery() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => openEditModal(item)}
-                    className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 text-sm"
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 border-2 border-blue-300 text-sm font-extrabold shadow-sm hover:shadow-md transition-all"
+                    style={{ fontWeight: '800' }}
                   >
-                    <Edit className="h-4 w-4" />
+                    <Edit className="h-5 w-5" />
                     Edit
                   </button>
                   <button
                     onClick={() => setDeleteConfirm(item.id)}
-                    className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 text-sm"
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 border-2 border-red-300 text-sm font-extrabold shadow-sm hover:shadow-md transition-all"
+                    style={{ fontWeight: '800' }}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-5 w-5" />
                     Delete
                   </button>
                 </div>
@@ -485,16 +509,29 @@ export default function AdminGallery() {
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    disabled={uploading}
+                    className="px-6 py-3 border-2 border-gray-400 text-gray-700 font-bold rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ fontWeight: '700' }}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={uploading || !imageFile}
-                    className="px-4 py-2 bg-[#d4af37] text-white rounded-lg hover:bg-[#c4a137] disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-8 py-3 bg-gradient-to-r from-[#C9A96E] to-[#B8956A] text-white rounded-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed font-extrabold text-lg shadow-lg flex items-center gap-2"
+                    style={{ fontWeight: '900' }}
                   >
-                    {uploading ? 'Uploading...' : 'Add Image'}
+                    {uploading ? (
+                      <>
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Uploading...
+                      </>
+                    ) : (
+                      'Add Image'
+                    )}
                   </button>
                 </div>
               </form>
@@ -592,16 +629,29 @@ export default function AdminGallery() {
                   <button
                     type="button"
                     onClick={() => setShowEditModal(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    disabled={uploading}
+                    className="px-6 py-3 border-2 border-gray-400 text-gray-700 font-bold rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ fontWeight: '700' }}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={uploading}
-                    className="px-4 py-2 bg-[#d4af37] text-white rounded-lg hover:bg-[#c4a137] disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-8 py-3 bg-gradient-to-r from-[#C9A96E] to-[#B8956A] text-white rounded-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed font-extrabold text-lg shadow-lg flex items-center gap-2"
+                    style={{ fontWeight: '900' }}
                   >
-                    {uploading ? 'Updating...' : 'Update Image'}
+                    {uploading ? (
+                      <>
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Updating...
+                      </>
+                    ) : (
+                      'Update Image'
+                    )}
                   </button>
                 </div>
               </form>

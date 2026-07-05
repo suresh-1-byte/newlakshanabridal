@@ -29,8 +29,8 @@ export default function Settings() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-serif font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-600 mt-1">Manage your admin preferences</p>
+        <h1 className="text-4xl font-serif font-extrabold text-gray-900" style={{ fontWeight: '900' }}>Settings</h1>
+        <p className="text-gray-800 mt-2 font-bold text-lg" style={{ fontWeight: '700' }}>Manage your admin preferences</p>
       </div>
 
       {/* Content */}
@@ -59,9 +59,10 @@ export default function Settings() {
                     }`}
                   />
                   <span
-                    className={`text-sm font-medium ${
+                    className={`text-base font-extrabold ${
                       activeTab === tab.id ? "text-gray-900" : "text-gray-700"
                     }`}
+                    style={{ fontWeight: activeTab === tab.id ? '900' : '700' }}
                   >
                     {tab.label}
                   </span>
@@ -81,24 +82,24 @@ export default function Settings() {
               className="space-y-6"
             >
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-1">
+                <h2 className="text-2xl font-extrabold text-gray-900 mb-2" style={{ fontWeight: '900' }}>
                   Profile Settings
                 </h2>
-                <p className="text-sm text-gray-600">
+                <p className="text-base font-bold text-gray-700" style={{ fontWeight: '700' }}>
                   Update your personal information
                 </p>
               </div>
 
               {/* Profile Picture */}
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#C9A96E] to-[#B8956A] flex items-center justify-center text-white font-bold text-2xl shadow-lg">
+                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#C9A96E] to-[#B8956A] flex items-center justify-center text-white font-extrabold text-3xl shadow-lg">
                   {adminData?.fullName?.charAt(0) || "A"}
                 </div>
                 <div>
-                  <button className="px-6 py-3 bg-gradient-to-r from-[#d4af37] to-[#f4d35e] text-white rounded-xl font-semibold shadow-md hover:shadow-lg hover:from-[#f4d35e] hover:to-[#d4af37] transition-all duration-300 transform hover:-translate-y-0.5">
+                  <button className="px-8 py-4 bg-gradient-to-r from-[#C9A96E] to-[#B8956A] text-white rounded-xl font-extrabold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 text-lg" style={{ fontWeight: '900' }}>
                     Change Photo
                   </button>
-                  <p className="text-xs text-gray-500 mt-2">
+                  <p className="text-sm font-bold text-gray-700 mt-2" style={{ fontWeight: '700' }}>
                     JPG, PNG or GIF. Max 2MB
                   </p>
                 </div>
@@ -107,44 +108,48 @@ export default function Settings() {
               {/* Form Fields */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-extrabold text-gray-900 mb-3" style={{ fontWeight: '800' }}>
                     Full Name
                   </label>
                   <input
                     type="text"
                     defaultValue={adminData?.fullName}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-transparent"
+                    className="w-full px-4 py-4 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-[#C9A96E] text-base font-bold text-gray-900"
+                    style={{ fontSize: '16px', fontWeight: '700' }}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-extrabold text-gray-900 mb-3" style={{ fontWeight: '800' }}>
                     Email
                   </label>
                   <input
                     type="email"
                     defaultValue={adminData?.email}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-transparent"
+                    className="w-full px-4 py-4 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-[#C9A96E] text-base font-bold text-gray-900"
+                    style={{ fontSize: '16px', fontWeight: '700' }}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-extrabold text-gray-900 mb-3" style={{ fontWeight: '800' }}>
                     Phone
                   </label>
                   <input
                     type="tel"
                     defaultValue={adminData?.phone}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-transparent"
+                    className="w-full px-4 py-4 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-[#C9A96E] text-base font-bold text-gray-900"
+                    style={{ fontSize: '16px', fontWeight: '700' }}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-extrabold text-gray-900 mb-3" style={{ fontWeight: '800' }}>
                     Role
                   </label>
                   <input
                     type="text"
                     defaultValue={adminData?.role || "Administrator"}
                     disabled
-                    className="w-full px-4 py-2 border border-gray-300 rounded-xl bg-gray-50 text-gray-500"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl bg-gray-100 text-gray-700 font-bold"
+                    style={{ fontSize: '16px', fontWeight: '700' }}
                   />
                 </div>
               </div>
@@ -153,9 +158,10 @@ export default function Settings() {
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="px-8 py-3 bg-gradient-to-r from-[#d4af37] to-[#f4d35e] text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:from-[#f4d35e] hover:to-[#d4af37] transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-2 text-base"
+                  className="px-10 py-4 bg-gradient-to-r from-[#C9A96E] to-[#B8956A] text-white rounded-xl font-extrabold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 text-lg"
+                  style={{ fontWeight: '900' }}
                 >
-                  <Save className="w-5 h-5" />
+                  <Save className="w-6 h-6" />
                   {saving ? "Saving..." : "Save Changes"}
                 </button>
               </div>
@@ -222,46 +228,50 @@ export default function Settings() {
               className="space-y-6"
             >
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-1">
+                <h2 className="text-2xl font-extrabold text-gray-900 mb-2" style={{ fontWeight: '900' }}>
                   Security Settings
                 </h2>
-                <p className="text-sm text-gray-600">
+                <p className="text-base font-bold text-gray-700" style={{ fontWeight: '700' }}>
                   Manage your password and security preferences
                 </p>
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-extrabold text-gray-900 mb-3" style={{ fontWeight: '800' }}>
                     Current Password
                   </label>
                   <input
                     type="password"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-transparent"
+                    className="w-full px-4 py-4 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-[#C9A96E] text-base font-bold"
+                    style={{ fontSize: '16px', fontWeight: '700' }}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-extrabold text-gray-900 mb-3" style={{ fontWeight: '800' }}>
                     New Password
                   </label>
                   <input
                     type="password"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-transparent"
+                    className="w-full px-4 py-4 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-[#C9A96E] text-base font-bold"
+                    style={{ fontSize: '16px', fontWeight: '700' }}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-base font-extrabold text-gray-900 mb-3" style={{ fontWeight: '800' }}>
                     Confirm New Password
                   </label>
                   <input
                     type="password"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-transparent"
+                    className="w-full px-4 py-4 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-[#C9A96E] focus:border-[#C9A96E] text-base font-bold"
+                    style={{ fontSize: '16px', fontWeight: '700' }}
                   />
                 </div>
               </div>
 
               <div className="flex justify-end pt-4">
-                <button className="px-8 py-3 bg-gradient-to-r from-[#d4af37] to-[#f4d35e] text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:from-[#f4d35e] hover:to-[#d4af37] transition-all duration-300 transform hover:-translate-y-0.5 text-base">
+                <button className="px-10 py-4 bg-gradient-to-r from-[#C9A96E] to-[#B8956A] text-white rounded-xl font-extrabold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-3 text-lg" style={{ fontWeight: '900' }}>
+                  <Lock className="w-6 h-6" />
                   Update Password
                 </button>
               </div>
