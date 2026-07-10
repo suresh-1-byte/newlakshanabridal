@@ -16,7 +16,7 @@ const contactItems = [
   {
     I: FiPhone,
     l: "Phone",
-    v: "+91 98765 43210",
+    v: "+91 94455 72770",
     hoverBg: "#4CAF50",      // Phone green
     hoverText: "#fff",
   },
@@ -37,7 +37,7 @@ const contactItems = [
   {
     I: FiMessageCircle,
     l: "WhatsApp",
-    v: "+91 98765 43210",
+    v: "+91 94455 72770",
     hoverBg: "#25D366",      // WhatsApp green
     hoverText: "#fff",
   },

@@ -235,17 +235,17 @@ export function Book() {
           </p>
           <div className="mt-12 space-y-6">
             <a
-              href="tel:+919876543210"
+              href="tel:+919445572770"
               className="flex items-center gap-4 group"
               data-cursor="hover"
             >
               <span className="w-10 h-10 border border-[#d4af37]/40 flex items-center justify-center text-[#d4af37] group-hover:bg-[#d4af37] group-hover:text-[#0d0d0d] transition">
                 <FiPhone />
               </span>
-              <span className="text-[#f8f5f0]/80 group-hover:text-[#d4af37] transition">+91 98765 43210</span>
+              <span className="text-[#f8f5f0]/80 group-hover:text-[#d4af37] transition">+91 94455 72770</span>
             </a>
             <a
-              href="https://wa.me/919876543210"
+              href="https://wa.me/919445572770"
               className="flex items-center gap-4 group"
               data-cursor="hover"
             >

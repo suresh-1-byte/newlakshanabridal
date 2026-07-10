@@ -170,7 +170,7 @@ export default function TestBooking() {
               <input 
                 type="tel" 
                 name="phone" 
-                defaultValue="9876543210"
+                defaultValue="9445572770"
                 className="w-full bg-[#0d0d0d] border border-[#d4af37] p-3 rounded text-[#f8f5f0]"
                 required 
               />
